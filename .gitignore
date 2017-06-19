@@ -1,0 +1,9 @@
+﻿*obj/
+*bin/
+/packages
+/.vs
+*.userprefs
+*.user
+*.UWP.nuget.*
+project.lock.json
+Resource.designer.cs

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="TheMovie.Views.MainPage"
+             Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem             
+            AutomationId="Search"            
+            Text="Search"
+            Icon="ic_search_white.png" 
+            Command="{Binding SearchMoviesCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="ItemsListView"
+				ItemsSource="{Binding Movies}"                
+                HasUnevenRows="true"
+                SeparatorVisibility="None"
+                RefreshCommand="{Binding LoadUpcomingMoviesCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"                      
+                CachingStrategy="RecycleElement"
+				ItemSelected="OnItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame HeightRequest="150" Padding="0" Margin="5">
+                                <StackLayout Orientation="Horizontal">
+                                    <ffimageloading:CachedImage
+                                        AutomationId="ImageViewCell"
+                                        Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"                                        
+                                        DownsampleToViewSize="True"/>
+                                    <StackLayout Margin="5" Orientation="Vertical">
+                                        <Label Text="{Binding Title}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemTextStyle}"
+                                            FontSize="16"
+                                            FontAttributes="Bold"/>
+                                        <Label Text="{Binding ReleaseDate, StringFormat='{0:D}'}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            FontSize="13"/>
+                                        <Label Text="{Binding GenresNames}"
+                                            LineBreakMode="WordWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            FontSize="13"/>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding VoteAverage}"
+                                                LineBreakMode="NoWrap"
+                                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                                FontSize="13"/>
+                                            <Image Source="ic_grade_black.png" HeightRequest="15"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

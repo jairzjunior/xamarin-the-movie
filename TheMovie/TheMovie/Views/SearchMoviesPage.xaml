@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="TheMovie.Views.SearchMoviesPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout>
+            <SearchBar 
+                x:Name="SearchBar" 
+                AutomationId="SearchBar"                 
+                Placeholder="Search" 
+                SearchCommand="{Binding SearchCommand}"
+                Text="{Binding SearchTerm}"/>
+            <ListView 
+                x:Name="ItemsListView"
+                AutomationId="ItemsListView"
+				ItemsSource="{Binding SearchResults}"
+                HasUnevenRows="true"
+                SeparatorVisibility="None"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                CachingStrategy="RecycleElement"
+				ItemSelected="OnItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame HeightRequest="100" Padding="0" Margin="5">
+                                <StackLayout Orientation="Horizontal">
+                                    <ffimageloading:CachedImage
+                                            AutomationId="ImageViewCell"
+                                            Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"                                            
+                                            DownsampleToViewSize="True"/>
+                                    <StackLayout Margin="5" Orientation="Vertical">
+                                        <Label Text="{Binding Title}"
+                                                LineBreakMode="NoWrap"
+                                                Style="{DynamicResource ListItemTextStyle}"
+                                                FontSize="16"
+                                                FontAttributes="Bold"/>
+                                        <Label Text="{Binding ReleaseDate, StringFormat='{0:yyyy}'}"
+                                                LineBreakMode="NoWrap"
+                                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                                FontSize="13"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
