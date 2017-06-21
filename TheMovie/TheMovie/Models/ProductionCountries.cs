@@ -2,10 +2,10 @@
 
 namespace TheMovie.Models
 {
-    public class Spoken_Languages
+    public class ProductionCountries
     {
-        [JsonProperty(PropertyName = "iso_639_1")]
-        public string Iso6391 { get; set; }
+        [JsonProperty(PropertyName = "iso_3166_1")]
+        public string Iso31661 { get; set; }
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }

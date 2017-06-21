@@ -2,7 +2,7 @@
 
 namespace TheMovie.Models
 {
-    public class Belongs_To_Collection
+    public class BelongsToCollection
     {
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }

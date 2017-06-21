@@ -5,7 +5,7 @@ namespace TheMovie.Models
     public class MovieDetail : Movie
     {                
         [JsonProperty(PropertyName = "belongs_to_collection")]
-        public Belongs_To_Collection BelongsToCollection { get; set; }
+        public BelongsToCollection BelongsToCollection { get; set; }
 
         [JsonProperty(PropertyName = "budget")]
         public int? Budget { get; set; }
@@ -20,10 +20,10 @@ namespace TheMovie.Models
         public string ImdbId { get; set; }
 
         [JsonProperty(PropertyName = "production_companies")]
-        public Production_Companies[] ProductionCompanies { get; set; }
+        public ProductionCompanies[] ProductionCompanies { get; set; }
 
         [JsonProperty(PropertyName = "production_countries")]
-        public Production_Countries[] ProductionCountries { get; set; }        
+        public ProductionCountries[] ProductionCountries { get; set; }        
 
         [JsonProperty(PropertyName = "revenue")]
         public int? Revenue { get; set; }
@@ -32,7 +32,7 @@ namespace TheMovie.Models
         public int? Runtime { get; set; }
 
         [JsonProperty(PropertyName = "spoken_languages")]
-        public Spoken_Languages[] SpokenLanguages { get; set; }
+        public SpokenLanguages[] SpokenLanguages { get; set; }
 
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
