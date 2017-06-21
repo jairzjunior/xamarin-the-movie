@@ -24,17 +24,21 @@ namespace TheMovie.UnitTest
 
         [TestMethod]
         public async Task GetMovieDetailAsync()
-        {            
-            var movie = await apiService.GetMovieDetailAsync(343611);
-            Assert.AreNotEqual(null, movie);
+        {
+            const int movieId = 343611;
+
+            var movie = await apiService.GetMovieDetailAsync(movieId);
+            Assert.IsNotNull(movie);
         }
 
         [TestMethod]
         [TestCategory("First page")]
         public async Task GetMoviesNowPlayingAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.NowPlaying);
-            Assert.AreNotEqual(null, searchMovie);
+            const int page = 1;
+
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(page, Models.Enums.MovieCategory.NowPlaying);
+            Assert.IsNotNull(searchMovie);
             Assert.AreNotEqual(0, searchMovie.Movies.Count);
         }
 
@@ -42,8 +46,10 @@ namespace TheMovie.UnitTest
         [TestCategory("First page")]
         public async Task GetMoviesPopularAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Popular);
-            Assert.AreNotEqual(null, searchMovie);
+            const int page = 1;
+
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(page, Models.Enums.MovieCategory.Popular);
+            Assert.IsNotNull(searchMovie);
             Assert.AreNotEqual(0, searchMovie.Movies.Count);            
         }
 
@@ -51,8 +57,10 @@ namespace TheMovie.UnitTest
         [TestCategory("First page")]
         public async Task GetMoviesTopRatedAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.TopRated);
-            Assert.AreNotEqual(null, searchMovie);
+            const int page = 1;
+
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(page, Models.Enums.MovieCategory.TopRated);
+            Assert.IsNotNull(searchMovie);
             Assert.AreNotEqual(0, searchMovie.Movies.Count);
         }
 
@@ -60,8 +68,10 @@ namespace TheMovie.UnitTest
         [TestCategory("First page")]
         public async Task GetMoviesUpcomingAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Upcoming);
-            Assert.AreNotEqual(null, searchMovie);
+            const int page = 1;
+
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(page, Models.Enums.MovieCategory.Upcoming);
+            Assert.IsNotNull(searchMovie);
             Assert.AreNotEqual(0, searchMovie.Movies.Count);
         }        
 
@@ -69,8 +79,11 @@ namespace TheMovie.UnitTest
         [TestCategory("First page")]
         public async Task SearchMoviesAsync()
         {
-            var searchMovie = await apiService.SearchMoviesAsync("abc", 1);
-            Assert.AreNotEqual(null, searchMovie);
+            const string searchTerm = "abc";
+            const int page = 1;
+
+            var searchMovie = await apiService.SearchMoviesAsync(searchTerm, page);
+            Assert.IsNotNull(searchMovie);
             Assert.AreNotEqual(0, searchMovie.Movies.Count);
         }
         
@@ -78,21 +91,26 @@ namespace TheMovie.UnitTest
         [TestCategory("Pagination")]
         public async Task GetMoviesNowPlayingPaginationAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.NowPlaying);
-            Assert.AreNotEqual(null, searchMovie);
-            Assert.AreNotEqual(0, searchMovie.Movies.Count);
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(1, Models.Enums.MovieCategory.NowPlaying);
+            var totalPages = searchMovie.TotalPages;
+            for (int i = 1; i <= totalPages; i++)
+            {
+                searchMovie = await apiService.GetMoviesByCategoryAsync(i, Models.Enums.MovieCategory.NowPlaying);
+                Assert.AreNotEqual(null, searchMovie);
+                Assert.AreNotEqual(0, searchMovie.Movies.Count);
+            }
         }
 
         [TestMethod]
         [TestCategory("Pagination")]
         public async Task GetMoviesPopularPaginationAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Popular);            
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(1, Models.Enums.MovieCategory.Popular);            
             var totalPages = searchMovie.TotalPages;            
-            for (int i = 0; i < totalPages; i++)
+            for (int i = 1; i <= totalPages; i++)
             {
-                searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Popular);
-                Assert.AreNotEqual(null, searchMovie);
+                searchMovie = await apiService.GetMoviesByCategoryAsync(i, Models.Enums.MovieCategory.Popular);
+                Assert.IsNotNull(searchMovie);
                 Assert.AreNotEqual(0, searchMovie.Movies.Count);
             }
         }
@@ -101,12 +119,12 @@ namespace TheMovie.UnitTest
         [TestCategory("Pagination")]
         public async Task GetMoviesTopRatedPaginationAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.TopRated);            
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(1, Models.Enums.MovieCategory.TopRated);            
             var totalPages = searchMovie.TotalPages;
-            for (int i = 0; i < totalPages; i++)
+            for (int i = 1; i <= totalPages; i++)
             {                
-                searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.TopRated);
-                Assert.AreNotEqual(null, searchMovie);
+                searchMovie = await apiService.GetMoviesByCategoryAsync(i, Models.Enums.MovieCategory.TopRated);
+                Assert.IsNotNull(searchMovie);
                 Assert.AreNotEqual(0, searchMovie.Movies.Count);
             }
         }
@@ -115,11 +133,11 @@ namespace TheMovie.UnitTest
         [TestCategory("Pagination")]
         public async Task GetMoviesUpcomingPaginationTestAsync()
         {
-            var searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Upcoming);
+            var searchMovie = await apiService.GetMoviesByCategoryAsync(1, Models.Enums.MovieCategory.Upcoming);
             var totalPages = searchMovie.TotalPages;
-            for (int i = 0; i < totalPages; i++)
+            for (int i = 1; i <= totalPages; i++)
             {
-                searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Upcoming);
+                searchMovie = await apiService.GetMoviesByCategoryAsync(i, Models.Enums.MovieCategory.Upcoming);
                 Assert.AreNotEqual(null, searchMovie);
                 Assert.AreNotEqual(0, searchMovie.Movies.Count);
             }
@@ -129,12 +147,14 @@ namespace TheMovie.UnitTest
         [TestCategory("Pagination")]
         public async Task SearchMoviesPaginationTestAsync()
         {
-            var searchMovie = await apiService.SearchMoviesAsync("abc", 1);
+            const string searchTerm = "abc";
+
+            var searchMovie = await apiService.SearchMoviesAsync(searchTerm, 1);
             var totalPages = searchMovie.TotalPages;
-            for (int i = 0; i < totalPages; i++)
+            for (int i = 1; i <= totalPages; i++)
             {
-                searchMovie = await apiService.GetMoviesAsync(1, Models.Enums.MovieCategory.Upcoming);
-                Assert.AreNotEqual(null, searchMovie);
+                searchMovie = await apiService.GetMoviesByCategoryAsync(i, Models.Enums.MovieCategory.Upcoming);
+                Assert.IsNotNull(searchMovie);
                 Assert.AreNotEqual(0, searchMovie.Movies.Count);
             }
         }        
