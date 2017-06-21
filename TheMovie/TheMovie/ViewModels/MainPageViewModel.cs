@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Plugin.Connectivity;
+using Prism.Commands;
+using Prism.Navigation;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-using TheMovie.Helpers;
 using TheMovie.Models;
-using TheMovie.Views;
-using Xamarin.Forms;
 
 namespace TheMovie.ViewModels
 {
@@ -14,29 +14,46 @@ namespace TheMovie.ViewModels
     {        
         // Variables to control of the pagination
         private int currentPage = 1;
-        private int totalPage = 0;        
+        private int totalPage = 0;
 
-        public ObservableRangeCollection<Movie> Movies { get; set; }
+        private bool isConnected;
+        public bool IsConnected
+        {
+            get { return isConnected; }
+            set { SetProperty(ref isConnected, value); }
+        }
 
-        public Command LoadUpcomingMoviesCommand { get; }
-        public Command SearchMoviesCommand { get; }        
-        public Command ShowMovieCommand { get; }
+        private List<Genre> genres;        
 
-        public MainPageViewModel()
-        {            
+        public ObservableCollection<Movie> Movies { get; set; }
+
+        public DelegateCommand LoadUpcomingMoviesCommand { get; }
+        public DelegateCommand SearchMoviesCommand { get; }        
+        public DelegateCommand<Movie> ShowMovieDetailCommand { get; }
+        public DelegateCommand<Movie> ItemAppearingCommand { get; }
+
+        private INavigationService navigationService;
+        public MainPageViewModel(INavigationService navigationService)
+        {
             Title = "TMDb - Upcoming Movies";
-            Movies = new ObservableRangeCollection<Movie>();
+            this.navigationService = navigationService;
+            Movies = new ObservableCollection<Movie>();
 
-            LoadUpcomingMoviesCommand = new Command(ExecuteLoadUpcomingMoviesCommand);
-            SearchMoviesCommand = new Command(ExecuteSearchMoviesCommand);
-            ShowMovieCommand = new Command<Movie>(ExecuteShowMovieCommand);
+            LoadUpcomingMoviesCommand = new DelegateCommand(ExecuteLoadUpcomingMoviesCommand);
+            SearchMoviesCommand = new DelegateCommand(ExecuteSearchMoviesCommand);
+            ShowMovieDetailCommand = new DelegateCommand<Movie>(ExecuteShowMovieDetailCommand);
+            ItemAppearingCommand = new DelegateCommand<Movie>(ExecuteItemAppearingCommand);
 
-            LoadUpcomingMoviesCommand.Execute(null);
+            LoadUpcomingMoviesCommand.Execute();
+
+            IsConnected = CrossConnectivity.Current.IsConnected;
         }        
 
         private async void ExecuteLoadUpcomingMoviesCommand()
         {
-            if (IsBusy)
+            IsConnected = CrossConnectivity.Current.IsConnected;
+
+            if ((IsBusy) || (!IsConnected))
                 return;
 
             IsBusy = true;
@@ -48,28 +65,40 @@ namespace TheMovie.ViewModels
             }
             finally
             {
-                IsBusy = false;                
+                IsBusy = false;
             }
         }
 
         private async void ExecuteSearchMoviesCommand()
-        {
-            await App.Current.MainPage.Navigation.PushAsync(new SearchMoviesPage());
+        {            
+            await navigationService.NavigateAsync("SearchMoviesPage");
         }
 
-        private async void ExecuteShowMovieCommand(Movie movie)
+        private async void ExecuteShowMovieDetailCommand(Movie movie)
+        {            
+            var p = new NavigationParameters();
+            p.Add(nameof(movie), movie);
+            await navigationService.NavigateAsync("MovieDetailPage", p);
+        }
+
+        private async void ExecuteItemAppearingCommand(Movie movie)
         {
-            await App.Current.MainPage.Navigation.PushAsync(new MovieDetailPage(new MovieDetailViewModel(movie)));
+            int itemLoadNextItem = 5;
+            int viewCellIndex = Movies.IndexOf(movie);
+            if (Movies.Count - itemLoadNextItem <= viewCellIndex)
+            {
+                await NextPageUpcomingMoviesAsync();
+            }
         }
 
         private async Task LoadMoviesAsync(int page, Enums.MovieCategory sortBy)
         {
-            var genres = await ApiService.GetGenresAsync();
-            var searchMovies = await ApiService.GetMoviesAsync(page, sortBy);
-            if (searchMovies != null)
+            genres = genres ?? await ApiService.GetGenresAsync();
+            var movies = await ApiService.GetMoviesByCategoryAsync(page, sortBy);
+            if (movies != null)
             {
-                totalPage = searchMovies.TotalPages;
-                foreach (var item in searchMovies.Movies)
+                totalPage = movies.TotalPages;
+                foreach (var item in movies.Movies)
                 {
                     GenreListToString(genres, item);
                     Movies.Add(item);
@@ -81,8 +110,8 @@ namespace TheMovie.ViewModels
         {
             currentPage++;
             if (currentPage <= totalPage)
-            {
-                await LoadMoviesAsync(currentPage, Enums.MovieCategory.Upcoming);                
+            {                
+                await LoadMoviesAsync(currentPage, Enums.MovieCategory.Upcoming);
             }
         }
 
@@ -96,7 +125,7 @@ namespace TheMovie.ViewModels
             item.GenresNames = "";
             for (int i = 0; i < item.GenreIds.Length; i++)
             {
-                var genreId = item.GenreIds[i];
+                var genreId = item.GenreIds[i];                
                 item.GenresNames += genres.FirstOrDefault(g => g.Id == genreId)?.Name;
                 item.GenresNames += i < (item.GenreIds.Length - 1) ? ", " : "";
             }            

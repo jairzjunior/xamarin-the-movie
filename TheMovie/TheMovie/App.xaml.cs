@@ -1,23 +1,26 @@
-﻿using TheMovie.Views;
-
+﻿using Prism.Unity;
+using TheMovie.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TheMovie
 {
-    public partial class App : Application
-    {
-        public App()
+    public partial class App : PrismApplication
+    {        
+        public App(IPlatformInitializer initializer = null) : base(initializer) { }
+
+        protected override void OnInitialized()
         {
             InitializeComponent();
 
-            SetMainPage();
+            NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MainPage)}");
         }
 
-        public static void SetMainPage()
-        {            
-            Current.MainPage = new NavigationPage(new MainPage());            
+        protected override void RegisterTypes()
+        {
+            Container.RegisterTypeForNavigation<NavigationPage>();
+            Container.RegisterTypeForNavigation<MainPage>();
+            Container.RegisterTypeForNavigation<SearchMoviesPage>();
+            Container.RegisterTypeForNavigation<MovieDetailPage>();            
         }
     }
 }

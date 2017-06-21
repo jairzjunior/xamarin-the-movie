@@ -1,51 +1,73 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:c="clr-namespace:TheMovie.Converters;assembly=TheMovie"             
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="TheMovie.Views.SearchMoviesPage"
              Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+            <c:ItemVisibilityEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <SearchBar 
                 x:Name="SearchBar" 
-                AutomationId="SearchBar"                 
+                AutomationId="SearchBar"
                 Placeholder="Search" 
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchTerm}"/>
             <ListView 
                 x:Name="ItemsListView"
                 AutomationId="ItemsListView"
-				ItemsSource="{Binding SearchResults}"
+		ItemsSource="{Binding SearchResults}"
                 HasUnevenRows="true"
                 SeparatorVisibility="None"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                CachingStrategy="RecycleElement"
-				ItemSelected="OnItemSelected">
+                CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Frame HeightRequest="100" Padding="0" Margin="5">
                                 <StackLayout Orientation="Horizontal">
                                     <ffimageloading:CachedImage
-                                            AutomationId="ImageViewCell"
-                                            Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"                                            
-                                            DownsampleToViewSize="True"/>
+                                        AutomationId="ImageViewCell"
+                                        WidthRequest="70"
+                                        Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
+                                        LoadingPlaceholder="placeholder_portrait.png"
+                                        DownsampleToViewSize="True"/>
                                     <StackLayout Margin="5" Orientation="Vertical">
                                         <Label Text="{Binding Title}"
-                                                LineBreakMode="NoWrap"
-                                                Style="{DynamicResource ListItemTextStyle}"
-                                                FontSize="16"
-                                                FontAttributes="Bold"/>
+                                            AutomationId="LabelTitle"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemTextStyle}"
+                                            FontSize="16"
+                                            FontAttributes="Bold"/>
                                         <Label Text="{Binding ReleaseDate, StringFormat='{0:yyyy}'}"
-                                                LineBreakMode="NoWrap"
-                                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                                FontSize="13"/>
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            FontSize="13"/>
                                     </StackLayout>
                                 </StackLayout>
                             </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior 
+                        EventName="ItemTapped" 
+                        Command="{Binding ShowMovieDetailCommand}"
+                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                    <b:EventToCommandBehavior
+                        EventName="ItemAppearing" 
+                        Command="{Binding ItemAppearingCommand}"
+                        EventArgsConverter="{StaticResource itemAppearingEventArgsConverter}" />
+                </ListView.Behaviors>
             </ListView>
         </StackLayout>
     </ContentPage.Content>

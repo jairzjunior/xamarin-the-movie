@@ -2,9 +2,17 @@
 Cross-platform application with Xamarin Forms that uses [The Movie Database API 3](https://developers.themoviedb.org/3).
 
 ## Third-party libraries
-* __Prism Core:__ Used `BindableBase` in ViewModels because of the implementation of INotifyPropertyChanged
-* __FFImageLoading:__ Used because of higher performance in loading images
-* __Xam.Plugin.Connectivity:__ Used because of verifying connectivity internet
+* [Prism](https://github.com/PrismLibrary/Prism) 
+    * Used because of the implementation of INotifyPropertyChanged and navigation in Views following the MVVM pattern
+
+* [FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)
+    * Used because of higher performance in loading images
+
+* [Xam.Plugin.Connectivity](https://github.com/jamesmontemagno/ConnectivityPlugin)
+    * Used because of verifying connectivity internet
+
+* [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+    * Used for annotation in classes models and deserialization JSON
 
 ## Screenshots
 

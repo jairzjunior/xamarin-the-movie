@@ -1,34 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using Prism.Navigation;
+using System.Threading.Tasks;
 using TheMovie.Models;
-using Xamarin.Forms;
 
 namespace TheMovie.ViewModels
 {
-    public class MovieDetailViewModel : BaseViewModel
+    public class MovieDetailPageViewModel : BaseViewModel, INavigationAware
     {
         private MovieDetail movieDetail;
         public MovieDetail MovieDetail
         {
             get { return movieDetail; }
             set { SetProperty(ref movieDetail, value); }
-        }
-
-        private bool isDone = false;
-        public bool IsDone
-        {
-            get { return isDone; }
-            set { SetProperty(ref isDone, value); }
-        }
-
-        public MovieDetailViewModel(Movie movie)
-        {
-            this.Title = movie.Title;            
-
-            var loadMovieCommand = new Command<int>(ExecuteLoadMovieCommand);
-            loadMovieCommand.Execute(movie.Id);
-        }
-    
-        private async void ExecuteLoadMovieCommand(int movieId)
+        }        
+  
+        private async Task LoadMovieAsync(int movieId)
         {
             if (IsBusy)
                 return;
@@ -40,9 +25,23 @@ namespace TheMovie.ViewModels
             }
             finally
             {
-                IsBusy = false;                
-                IsDone = true;
+                IsBusy = false;
             }
+        }
+
+        public async void OnNavigatingTo(NavigationParameters parameters)
+        {
+            var movie = parameters.GetValue<Movie>("movie");
+            Title = movie.Title;
+            await LoadMovieAsync(movie.Id);
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {            
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
         }
     }
 }

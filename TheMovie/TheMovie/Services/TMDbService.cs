@@ -64,7 +64,7 @@ namespace TheMovie.Services
         /// <param name="page"></param>
         /// <param name="category"></param>
         /// <returns></returns>
-        public async Task<SearchMovie> GetMoviesAsync(int page, Enums.MovieCategory category)
+        public async Task<SearchMovie> GetMoviesByCategoryAsync(int page, Enums.MovieCategory category)
         {            
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

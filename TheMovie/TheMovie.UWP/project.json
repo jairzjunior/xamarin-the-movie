@@ -2,6 +2,8 @@
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "Prism.Core": "6.3.0",
+    "Prism.Forms": "6.3.0",
+    "Prism.Unity.Forms": "6.3.0",
     "Xam.Plugin.Connectivity": "2.3.0",
     "Xamarin.FFImageLoading": "2.2.9",
     "Xamarin.FFImageLoading.Forms": "2.2.9",

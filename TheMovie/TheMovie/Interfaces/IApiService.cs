@@ -7,7 +7,7 @@ namespace TheMovie.Interfaces
     public interface IApiService
     {
         Task<SearchMovie> SearchMoviesAsync(string searchTerm, int page);
-        Task<SearchMovie> GetMoviesAsync(int page, Enums.MovieCategory sortBy);        
+        Task<SearchMovie> GetMoviesByCategoryAsync(int page, Enums.MovieCategory sortBy);        
         Task<MovieDetail> GetMovieDetailAsync(int id);
         Task<List<Genre>> GetGenresAsync();
     }
