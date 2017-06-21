@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -39,9 +37,9 @@ namespace TheMovie.UITest
                 "Resident",
                 "Wonder",
                 "John"
-            };
+            };            
 
-            app.Tap(c => c.Marked("Search"));
+            app.Tap(c => c.Marked("Search"));            
 
             foreach (var searchTerm in searchTerms)
             {                
@@ -53,6 +51,10 @@ namespace TheMovie.UITest
                 app.ScrollUp();
                 app.ScrollUp();
                 app.ScrollUp();
+                
+                AppResult[] results = app.Query("search_src_text");
+                Assert.AreEqual(searchTerm, results[0].Text);
+
                 app.ClearText(c => c.Marked("SearchBar"));
             }            
         }
@@ -60,7 +62,7 @@ namespace TheMovie.UITest
         [Test]
         public void SearchMovieByTitleSelectItem()
         {
-            var searchTerm = "Mad Max";
+            const string searchTerm = "Mad Max";
 
             app.Tap(c => c.Marked("Search"));
             app.EnterText(c => c.Marked("SearchBar"), searchTerm);
@@ -68,15 +70,66 @@ namespace TheMovie.UITest
             app.Tap(c => c.Marked("ImageViewCell"));
             app.ScrollDown();
             app.ScrollUp();
+            app.Back();
+
+            AppResult[] results = app.Query("search_src_text");
+            Assert.AreEqual(searchTerm, results[0].Text);            
+        }
+
+        [Test]
+        public void SearchMoviePagination()
+        {
+            const int minMoviesExpected = 40;
+            const int totalScroll = 50;
+
+            const string searchTerm = "a";
+
+            app.Tap(c => c.Marked("Search"));
+            app.EnterText(c => c.Marked("SearchBar"), searchTerm);
+            app.PressEnter();
+
+            var titles = new List<string>();
+
+            for (int i = 0; i < totalScroll; i++)
+            {
+                AppResult[] result = app.Query("LabelTitle");
+                foreach (var item in result)
+                {
+                    if (titles.Find(a => a.Equals(item.Text)) == null)
+                    {
+                        titles.Add(item.Text);
+                    }
+                }
+                
+                app.ScrollDown();
+            }                                  
+
+            Assert.GreaterOrEqual(titles.Count, minMoviesExpected);            
         }
 
         [Test]
         public void UpcomingMoviePagination()
         {
-            for (int i = 0; i < 100; i++)
+            const int minMoviesExpected = 40;
+            const int totalScroll = 50;
+
+            var titles = new List<string>();
+
+            for (int i = 0; i < totalScroll; i++)
             {
+                AppResult[] result = app.Query("LabelTitle");
+                foreach (var item in result)
+                {
+                    if (titles.Find(a => a.Equals(item.Text)) == null)
+                    {
+                        titles.Add(item.Text);
+                    }
+                }
+
                 app.ScrollDown();
-            }                                   
+            }
+
+            Assert.GreaterOrEqual(titles.Count, minMoviesExpected);            
         }
 
         [Test]
@@ -85,7 +138,9 @@ namespace TheMovie.UITest
             app.Tap(c => c.Marked("ImageViewCell"));
             app.ScrollDown();
             app.ScrollUp();
+            
+            AppResult[] title = app.Query("LabelTitle");
+            Assert.AreNotEqual("", title);            
         }
     }
 }
-
