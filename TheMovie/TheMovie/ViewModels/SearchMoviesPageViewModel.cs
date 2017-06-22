@@ -69,8 +69,7 @@ namespace TheMovie.ViewModels
         }
 
         private async void ExecuteShowMovieDetailCommand(Movie movie)
-        {
-            //await App.Current.MainPage.Navigation.PushAsync(new MovieDetailPage(new MovieDetailViewModel(movie)));
+        {            
             var p = new NavigationParameters();
             p.Add(nameof(movie), movie);
             await navigationService.NavigateAsync("MovieDetailPage", p);
