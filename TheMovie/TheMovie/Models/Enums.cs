@@ -27,7 +27,7 @@
                     return "/movie/top_rated";                    
 
                 default:
-                    return "/movie/upcoming";
+                    return "";
             }
         }        
     }

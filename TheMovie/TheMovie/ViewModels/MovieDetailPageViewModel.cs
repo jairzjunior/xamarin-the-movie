@@ -21,7 +21,7 @@ namespace TheMovie.ViewModels
             IsBusy = true;
             try
             {
-                MovieDetail = await ApiService.GetMovieDetailAsync(movieId);
+                MovieDetail = await ApiService.GetMovieDetailAsync(movieId).ConfigureAwait(false);
             }
             finally
             {
@@ -33,15 +33,17 @@ namespace TheMovie.ViewModels
         {
             var movie = parameters.GetValue<Movie>("movie");
             Title = movie.Title;
-            await LoadMovieAsync(movie.Id);
+            await LoadMovieAsync(movie.Id).ConfigureAwait(false);
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
-        {            
+        {
+            // Do nothing, added because of implementation INavigationAware.
         }
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
+            // Do nothing, added because of implementation INavigationAware.
         }
     }
 }

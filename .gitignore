@@ -2,6 +2,7 @@
 *bin/
 /packages
 /.vs
+/.sonarqube
 *.userprefs
 *.user
 *.UWP.nuget.*

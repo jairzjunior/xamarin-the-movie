@@ -6,13 +6,13 @@ using TheMovie.Services;
 namespace TheMovie.UnitTest
 {
     [TestClass]
-    public class TestTMDbService
+    public class TestTmdbService
     {
         private IApiService apiService;
 
-        public TestTMDbService()
+        public TestTmdbService()
         {
-            apiService = new TMDbService();
+            apiService = new TmdbService();
         }        
 
         [TestMethod]

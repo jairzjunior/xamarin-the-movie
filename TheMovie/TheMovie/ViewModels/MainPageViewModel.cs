@@ -1,9 +1,12 @@
 ﻿using Plugin.Connectivity;
 using Prism.Commands;
 using Prism.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 using TheMovie.Models;
@@ -32,24 +35,22 @@ namespace TheMovie.ViewModels
         public DelegateCommand<Movie> ShowMovieDetailCommand { get; }
         public DelegateCommand<Movie> ItemAppearingCommand { get; }
 
-        private INavigationService navigationService;
+        private readonly INavigationService navigationService;
         public MainPageViewModel(INavigationService navigationService)
         {
             Title = "TMDb - Upcoming Movies";
             this.navigationService = navigationService;
             Movies = new ObservableCollection<Movie>();
 
-            LoadUpcomingMoviesCommand = new DelegateCommand(ExecuteLoadUpcomingMoviesCommand);
-            SearchMoviesCommand = new DelegateCommand(ExecuteSearchMoviesCommand);
-            ShowMovieDetailCommand = new DelegateCommand<Movie>(ExecuteShowMovieDetailCommand);
-            ItemAppearingCommand = new DelegateCommand<Movie>(ExecuteItemAppearingCommand);
+            LoadUpcomingMoviesCommand = new DelegateCommand(async () => await ExecuteLoadUpcomingMoviesCommand().ConfigureAwait(false));
+            SearchMoviesCommand = new DelegateCommand(async () => await ExecuteSearchMoviesCommand().ConfigureAwait(false));
+            ShowMovieDetailCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteShowMovieDetailCommand(movie).ConfigureAwait(false));
+            ItemAppearingCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteItemAppearingCommand(movie).ConfigureAwait(false));
 
             LoadUpcomingMoviesCommand.Execute();
-
-            IsConnected = CrossConnectivity.Current.IsConnected;
         }        
 
-        private async void ExecuteLoadUpcomingMoviesCommand()
+        private async Task ExecuteLoadUpcomingMoviesCommand()
         {
             IsConnected = CrossConnectivity.Current.IsConnected;
 
@@ -61,7 +62,7 @@ namespace TheMovie.ViewModels
             try
             {
                 Movies.Clear();                
-                await LoadMoviesAsync(currentPage = 1, Enums.MovieCategory.Upcoming);
+                await LoadMoviesAsync(currentPage = 1, Enums.MovieCategory.Upcoming).ConfigureAwait(false);
             }
             finally
             {
@@ -69,41 +70,48 @@ namespace TheMovie.ViewModels
             }
         }
 
-        private async void ExecuteSearchMoviesCommand()
+        private async Task ExecuteSearchMoviesCommand()
         {            
-            await navigationService.NavigateAsync("SearchMoviesPage");
+            await navigationService.NavigateAsync("SearchMoviesPage").ConfigureAwait(false);
         }
 
-        private async void ExecuteShowMovieDetailCommand(Movie movie)
+        private async Task ExecuteShowMovieDetailCommand(Movie movie)
         {            
             var p = new NavigationParameters();
             p.Add(nameof(movie), movie);
-            await navigationService.NavigateAsync("MovieDetailPage", p);
+            await navigationService.NavigateAsync("MovieDetailPage", p).ConfigureAwait(false);
         }
 
-        private async void ExecuteItemAppearingCommand(Movie movie)
+        private async Task ExecuteItemAppearingCommand(Movie movie)
         {
             int itemLoadNextItem = 2;
             int viewCellIndex = Movies.IndexOf(movie);
             if (Movies.Count - itemLoadNextItem <= viewCellIndex)
-            {
-                await NextPageUpcomingMoviesAsync();
+            {                
+                await NextPageUpcomingMoviesAsync().ConfigureAwait(false);
             }
         }
 
         private async Task LoadMoviesAsync(int page, Enums.MovieCategory movieCategory)
         {
-            genres = genres ?? await ApiService.GetGenresAsync();
-            var movies = await ApiService.GetMoviesByCategoryAsync(page, movieCategory);
-            if (movies != null)
+            try
             {
-                totalPage = movies.TotalPages;
-                foreach (var item in movies.Movies)
+                genres = genres ?? await ApiService.GetGenresAsync().ConfigureAwait(false);
+                var movies = await ApiService.GetMoviesByCategoryAsync(page, movieCategory).ConfigureAwait(false);
+                if (movies != null)
                 {
-                    GenreListToString(genres, item);
-                    Movies.Add(item);
+                    totalPage = movies.TotalPages;
+                    foreach (var item in movies.Movies)
+                    {
+                        GenreListToString(genres, item);
+                        Movies.Add(item);
+                    }
                 }
-            }            
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         public async Task NextPageUpcomingMoviesAsync()
@@ -111,7 +119,7 @@ namespace TheMovie.ViewModels
             currentPage++;
             if (currentPage <= totalPage)
             {                
-                await LoadMoviesAsync(currentPage, Enums.MovieCategory.Upcoming);
+                await LoadMoviesAsync(currentPage, Enums.MovieCategory.Upcoming).ConfigureAwait(false);
             }
         }
 
@@ -121,14 +129,16 @@ namespace TheMovie.ViewModels
         /// <param name="genres"></param>
         /// <param name="item"></param>
         private void GenreListToString(List<Genre> genres, Movie item)
-        {
-            item.GenresNames = "";
+        {            
+            StringBuilder genresNames = new StringBuilder();
             for (int i = 0; i < item.GenreIds.Length; i++)
             {
                 var genreId = item.GenreIds[i];                
-                item.GenresNames += genres.FirstOrDefault(g => g.Id == genreId)?.Name;
-                item.GenresNames += i < (item.GenreIds.Length - 1) ? ", " : "";
-            }            
+                var genreName = genres.FirstOrDefault(g => g.Id == genreId)?.Name;
+                genreName += i < (item.GenreIds.Length - 1) ? ", " : "";
+                genresNames.Append(genreName);
+            }
+            item.GenresNames = genresNames.ToString();
         }        
     }
 }

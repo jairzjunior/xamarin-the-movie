@@ -1,7 +1,9 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using TheMovie.Models;
@@ -31,7 +33,7 @@ namespace TheMovie.ViewModels
         public DelegateCommand<Movie> ShowMovieDetailCommand { get; }
         public DelegateCommand<Movie> ItemAppearingCommand { get; }
 
-        private INavigationService navigationService;
+        private readonly INavigationService navigationService;
         private readonly IPageDialogService pageDialogService;
         public SearchMoviesPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
         {
@@ -40,12 +42,12 @@ namespace TheMovie.ViewModels
             this.pageDialogService = pageDialogService;
             SearchResults = new ObservableCollection<Movie>();
             
-            SearchCommand = new DelegateCommand(ExecuteSearchCommand);
-            ShowMovieDetailCommand = new DelegateCommand<Movie>(ExecuteShowMovieDetailCommand);
-            ItemAppearingCommand = new DelegateCommand<Movie>(ExecuteItemAppearingCommand);
-        }        
+            SearchCommand = new DelegateCommand(async () => await ExecuteSearchCommand().ConfigureAwait(false));
+            ShowMovieDetailCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteShowMovieDetailCommand(movie).ConfigureAwait(false));
+            ItemAppearingCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteItemAppearingCommand(movie).ConfigureAwait(false));
+        }
 
-        private async void ExecuteSearchCommand()
+        private async Task ExecuteSearchCommand()
         {
             if (IsBusy)
                 return;
@@ -54,7 +56,7 @@ namespace TheMovie.ViewModels
             try
             {
                 SearchResults.Clear();
-                await LoadAsync(currentPage = 1);
+                await LoadAsync(currentPage = 1).ConfigureAwait(false);
             }
             finally
             {
@@ -63,25 +65,25 @@ namespace TheMovie.ViewModels
 
             if (SearchResults.Count == 0)
             {
-                await pageDialogService.DisplayAlertAsync("The Movie", "No results found.", "Ok");
+                await pageDialogService.DisplayAlertAsync("The Movie", "No results found.", "Ok").ConfigureAwait(false);
                 return;
             }
         }
 
-        private async void ExecuteShowMovieDetailCommand(Movie movie)
+        private async Task ExecuteShowMovieDetailCommand(Movie movie)
         {            
             var p = new NavigationParameters();
             p.Add(nameof(movie), movie);
-            await navigationService.NavigateAsync("MovieDetailPage", p);
+            await navigationService.NavigateAsync("MovieDetailPage", p).ConfigureAwait(false);
         }
 
-        private async void ExecuteItemAppearingCommand(Movie movie)
+        private async Task ExecuteItemAppearingCommand(Movie movie)
         {            
             int itemLoadNextItem = 2;
             int viewCellIndex = SearchResults.IndexOf(movie);
             if (SearchResults.Count - itemLoadNextItem <= viewCellIndex)
             {
-                await NextPageAsync();
+                await NextPageAsync().ConfigureAwait(false);
             }
         }
 
@@ -90,22 +92,29 @@ namespace TheMovie.ViewModels
             currentPage++;
             if (currentPage <= totalPage)
             {
-                await LoadAsync(currentPage);
+                await LoadAsync(currentPage).ConfigureAwait(false);
             }
         }
 
         private async Task LoadAsync(int page)
         {
-            var searchMovies = await ApiService.SearchMoviesAsync(searchTerm, page);
-
-            if (searchMovies != null)
+            try
             {
-                totalPage = searchMovies.TotalPages;
-                foreach (var movie in searchMovies.Movies)
+                var searchMovies = await ApiService.SearchMoviesAsync(searchTerm, page).ConfigureAwait(false);
+
+                if (searchMovies != null)
                 {
-                    SearchResults.Add(movie);
-                }                               
-            }                
+                    totalPage = searchMovies.TotalPages;
+                    foreach (var movie in searchMovies.Movies)
+                    {
+                        SearchResults.Add(movie);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }        
     }
 }

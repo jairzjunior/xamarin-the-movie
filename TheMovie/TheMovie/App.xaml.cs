@@ -6,7 +6,12 @@ namespace TheMovie
 {
     public partial class App : PrismApplication
     {        
-        public App(IPlatformInitializer initializer = null) : base(initializer) { }
+        public App()
+        {
+            new App(initializer: null);
+        }
+
+        public App(IPlatformInitializer initializer) : base(initializer) { }
 
         protected override void OnInitialized()
         {
