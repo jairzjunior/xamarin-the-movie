@@ -12,12 +12,21 @@ namespace TheMovie.Views
                 // Manually deselect item
                 ((ListView)sender).SelectedItem = null;
             };
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                //Fixes an android bug where the search bar would be hidden
+                SearchBar.HeightRequest = 40;
+            }
         }        
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            SearchBar.Focus();
+            if (string.IsNullOrEmpty(SearchBar.Text))
+            {
+                SearchBar.Focus();
+            }            
         }        
     }
 }
