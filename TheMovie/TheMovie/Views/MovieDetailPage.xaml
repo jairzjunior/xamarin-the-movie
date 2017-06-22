@@ -42,7 +42,7 @@
                     <Label Text="Genres" FontSize="Medium" FontAttributes="Bold"/>
                     <ListView 
                         x:Name="GenresListView"                        
-			ItemsSource="{Binding MovieDetail.Genres}"
+                        ItemsSource="{Binding MovieDetail.Genres}"
                         VerticalOptions="FillAndExpand"                        
                         HasUnevenRows="true"
                         CachingStrategy="RecycleElement">

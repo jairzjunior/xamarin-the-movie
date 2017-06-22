@@ -83,7 +83,7 @@ namespace TheMovie.ViewModels
 
         private async void ExecuteItemAppearingCommand(Movie movie)
         {
-            int itemLoadNextItem = 5;
+            int itemLoadNextItem = 2;
             int viewCellIndex = Movies.IndexOf(movie);
             if (Movies.Count - itemLoadNextItem <= viewCellIndex)
             {
@@ -91,10 +91,10 @@ namespace TheMovie.ViewModels
             }
         }
 
-        private async Task LoadMoviesAsync(int page, Enums.MovieCategory sortBy)
+        private async Task LoadMoviesAsync(int page, Enums.MovieCategory movieCategory)
         {
             genres = genres ?? await ApiService.GetGenresAsync();
-            var movies = await ApiService.GetMoviesByCategoryAsync(page, sortBy);
+            var movies = await ApiService.GetMoviesByCategoryAsync(page, movieCategory);
             if (movies != null)
             {
                 totalPage = movies.TotalPages;

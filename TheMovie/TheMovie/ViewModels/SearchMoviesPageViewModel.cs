@@ -78,7 +78,7 @@ namespace TheMovie.ViewModels
 
         private async void ExecuteItemAppearingCommand(Movie movie)
         {            
-            int itemLoadNextItem = 5;
+            int itemLoadNextItem = 2;
             int viewCellIndex = SearchResults.IndexOf(movie);
             if (SearchResults.Count - itemLoadNextItem <= viewCellIndex)
             {

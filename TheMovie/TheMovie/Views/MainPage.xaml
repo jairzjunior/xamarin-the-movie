@@ -27,10 +27,8 @@
             <Frame IsVisible="{Binding IsConnected, Converter={StaticResource inverter}}">
                 <StackLayout>
                     <Label
-                        Text="You need an internet connection. Check your connection and try again."
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"                    
-                        VerticalOptions="Center"
+                        Text="You need an internet connection. Check your connection and try again."                        
+                        HorizontalTextAlignment="Center"
                         VerticalTextAlignment="Center"/>
                     <Button
                         Text="Try again"                        
@@ -44,7 +42,7 @@
             <ListView 
                 x:Name="ItemsListView"                
                 IsVisible="{Binding IsConnected}"
-		ItemsSource="{Binding Movies}"
+                ItemsSource="{Binding Movies}"
                 HasUnevenRows="true"
                 SeparatorVisibility="None"
                 RefreshCommand="{Binding LoadUpcomingMoviesCommand}"

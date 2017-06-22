@@ -17,15 +17,15 @@
     <ContentPage.Content>
         <StackLayout>
             <SearchBar 
-                x:Name="SearchBar" 
+                x:Name="SearchBar"
                 AutomationId="SearchBar"
-                Placeholder="Search" 
+                Placeholder="Search"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchTerm}"/>
-            <ListView 
+            <ListView
                 x:Name="ItemsListView"
                 AutomationId="ItemsListView"
-		ItemsSource="{Binding SearchResults}"
+                ItemsSource="{Binding SearchResults}"
                 HasUnevenRows="true"
                 SeparatorVisibility="None"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
