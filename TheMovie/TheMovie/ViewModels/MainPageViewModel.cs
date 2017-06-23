@@ -3,13 +3,14 @@ using Prism.Commands;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using TheMovie.Helpers;
 using TheMovie.Models;
+using Xamarin.Forms;
 
 namespace TheMovie.ViewModels
 {
@@ -27,8 +28,7 @@ namespace TheMovie.ViewModels
         }
 
         private List<Genre> genres;        
-
-        public ObservableCollection<Movie> Movies { get; set; }
+        public ObservableRangeCollection<Movie> Movies { get; set; }
 
         public DelegateCommand LoadUpcomingMoviesCommand { get; }
         public DelegateCommand SearchMoviesCommand { get; }        
@@ -40,7 +40,7 @@ namespace TheMovie.ViewModels
         {
             Title = "TMDb - Upcoming Movies";
             this.navigationService = navigationService;
-            Movies = new ObservableCollection<Movie>();
+            Movies = new ObservableRangeCollection<Movie>();
 
             LoadUpcomingMoviesCommand = new DelegateCommand(async () => await ExecuteLoadUpcomingMoviesCommand().ConfigureAwait(false));
             SearchMoviesCommand = new DelegateCommand(async () => await ExecuteSearchMoviesCommand().ConfigureAwait(false));
@@ -61,8 +61,9 @@ namespace TheMovie.ViewModels
 
             try
             {
-                Movies.Clear();                
-                await LoadMoviesAsync(currentPage = 1, Enums.MovieCategory.Upcoming).ConfigureAwait(false);
+                Movies.Clear();
+                currentPage = 1;
+                await LoadMoviesAsync(currentPage, Enums.MovieCategory.Upcoming).ConfigureAwait(false);
             }
             finally
             {
@@ -96,17 +97,22 @@ namespace TheMovie.ViewModels
         {
             try
             {
-                genres = genres ?? await ApiService.GetGenresAsync().ConfigureAwait(false);
-                var movies = await ApiService.GetMoviesByCategoryAsync(page, movieCategory).ConfigureAwait(false);
-                if (movies != null)
+                // Added to configure "ConfigureAwait(true)" on Windows
+                var continueOnCapturedContext = Device.RuntimePlatform == Device.Windows;
+
+                genres = genres ?? await ApiService.GetGenresAsync().ConfigureAwait(continueOnCapturedContext);
+                var searchMovie = await ApiService.GetMoviesByCategoryAsync(page, movieCategory).ConfigureAwait(continueOnCapturedContext);
+                if (searchMovie != null)
                 {
-                    totalPage = movies.TotalPages;
-                    foreach (var item in movies.Movies)
-                    {
-                        GenreListToString(genres, item);
-                        Movies.Add(item);
+                    var movies = new List<Movie>();
+                    totalPage = searchMovie.TotalPages;
+                    foreach (var movie in searchMovie.Movies)
+                    {                                                
+                        GenreListToString(genres, movie);
+                        movies.Add(movie);
                     }
-                }
+                    Movies.AddRange(movies);
+                }                
             }
             catch (Exception ex)
             {

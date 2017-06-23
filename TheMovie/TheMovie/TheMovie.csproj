@@ -41,6 +41,7 @@
     <Compile Include="Converters\ItemAppearingEventArgsConverter.cs" />
     <Compile Include="Converters\ItemTappedEventArgsConverter.cs" />
     <Compile Include="Converters\NegateBooleanConverter.cs" />
+    <Compile Include="Helpers\ObservableRangeCollection.cs" />
     <Compile Include="Interfaces\INativeHelper.cs" />
     <Compile Include="Models\BelongsToCollection.cs" />
     <Compile Include="Models\Enums.cs" />

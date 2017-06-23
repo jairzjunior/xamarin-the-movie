@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+using TheMovie.Helpers;
 using TheMovie.Models;
+using Xamarin.Forms;
 
 namespace TheMovie.ViewModels
 {
@@ -27,7 +29,7 @@ namespace TheMovie.ViewModels
             }
         }
 
-        public ObservableCollection<Movie> SearchResults { get; set; }
+        public ObservableRangeCollection<Movie> SearchResults { get; set; }
 
         public DelegateCommand SearchCommand { get; }
         public DelegateCommand<Movie> ShowMovieDetailCommand { get; }
@@ -40,7 +42,7 @@ namespace TheMovie.ViewModels
             Title = "Search Movies";
             this.navigationService = navigationService;
             this.pageDialogService = pageDialogService;
-            SearchResults = new ObservableCollection<Movie>();
+            SearchResults = new ObservableRangeCollection<Movie>();
             
             SearchCommand = new DelegateCommand(async () => await ExecuteSearchCommand().ConfigureAwait(false));
             ShowMovieDetailCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteShowMovieDetailCommand(movie).ConfigureAwait(false));
@@ -56,7 +58,8 @@ namespace TheMovie.ViewModels
             try
             {
                 SearchResults.Clear();
-                await LoadAsync(currentPage = 1).ConfigureAwait(false);
+                currentPage = 1;
+                await LoadAsync(currentPage).ConfigureAwait(false);
             }
             finally
             {
@@ -100,15 +103,15 @@ namespace TheMovie.ViewModels
         {
             try
             {
-                var searchMovies = await ApiService.SearchMoviesAsync(searchTerm, page).ConfigureAwait(false);
+                // Added to configure "ConfigureAwait(true)" on Windows                
+                var continueOnCapturedContext = Device.RuntimePlatform == Device.Windows;
+
+                var searchMovies = await ApiService.SearchMoviesAsync(searchTerm, page).ConfigureAwait(continueOnCapturedContext);
 
                 if (searchMovies != null)
                 {
-                    totalPage = searchMovies.TotalPages;
-                    foreach (var movie in searchMovies.Movies)
-                    {
-                        SearchResults.Add(movie);
-                    }
+                    totalPage = searchMovies.TotalPages;                    
+                    SearchResults.AddRange(searchMovies.Movies);                    
                 }
             }
             catch (Exception ex)
