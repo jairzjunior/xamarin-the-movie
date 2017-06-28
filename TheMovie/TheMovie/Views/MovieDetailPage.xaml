@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"             
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:TheMovie.Converters;assembly=TheMovie"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"    
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="TheMovie.Views.MovieDetailPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:NegateBooleanConverter x:Key="inverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource inverter}}">
+        <StackLayout Padding="5">
+            <Frame Padding="0" Margin="5">
+                <StackLayout Spacing="5">
+                    <ffimageloading:CachedImage                        
+                        Source="{Binding MovieDetail.BackdropPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
+                        LoadingPlaceholder="placeholder_landscape.png"/>
+                    <StackLayout Spacing="5" Margin="5">
+                        <Label Text="Title" FontSize="Medium" FontAttributes="Bold"/>
+                        <Label AutomationId="LabelTitle" Text="{Binding MovieDetail.Title}" FontSize="Small"/>
+
+                        <Label Text="Original Title" FontSize="Medium" FontAttributes="Bold"/>
+                        <Label Text="{Binding MovieDetail.OriginalTitle}" FontSize="Small"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Frame Padding="0" Margin="5">
+                <StackLayout Spacing="5" Margin="5">
+                    <Label Text="Overview" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding MovieDetail.Overview}" FontSize="Small"/>
+
+                    <Label Text="Release Date" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding MovieDetail.ReleaseDate, StringFormat='{0:D}'}" FontSize="Small"/>
+                </StackLayout>
+            </Frame>
+            <Frame HeightRequest="250" Padding="0" Margin="5">
+                <StackLayout Spacing="5" Margin="5">
+                    <Label Text="Genres" FontSize="Medium" FontAttributes="Bold"/>
+                    <ListView 
+                        x:Name="GenresListView"                        
+                        ItemsSource="{Binding MovieDetail.Genres}"
+                        VerticalOptions="FillAndExpand"                        
+                        HasUnevenRows="true"
+                        CachingStrategy="RecycleElement">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Padding="10">
+                                        <Label 
+                                            Text="{Binding Name}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            FontSize="13"/>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

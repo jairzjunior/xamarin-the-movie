@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:c="clr-namespace:TheMovie.Converters;assembly=TheMovie"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="TheMovie.Views.MainPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+            <c:ItemVisibilityEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
+            <c:NegateBooleanConverter x:Key="inverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem             
+            AutomationId="Search"            
+            Text="Search"
+            Icon="ic_search_white.png" 
+            Command="{Binding SearchMoviesCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame IsVisible="{Binding IsConnected, Converter={StaticResource inverter}}">
+                <StackLayout>
+                    <Label
+                        Text="You need an internet connection. Check your connection and try again."                        
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"/>
+                    <Button
+                        Text="Try again"                        
+                        Command="{Binding LoadUpcomingMoviesCommand}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+                </StackLayout>
+            </Frame>
+            <ListView 
+                x:Name="ItemsListView"                
+                IsVisible="{Binding IsConnected}"
+                ItemsSource="{Binding Movies}"
+                HasUnevenRows="true"
+                SeparatorVisibility="None"
+                RefreshCommand="{Binding LoadUpcomingMoviesCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                CachingStrategy="RecycleElement">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame HeightRequest="150" Padding="0" Margin="5">
+                                <StackLayout Orientation="Horizontal">
+                                    <ffimageloading:CachedImage
+                                        AutomationId="ImageViewCell"
+                                        WidthRequest="100"
+                                        Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
+                                        LoadingPlaceholder="placeholder_portrait.png"
+                                        DownsampleToViewSize="True"/>
+                                    <StackLayout Margin="5" Orientation="Vertical">
+                                        <Label Text="{Binding Title}"
+                                            AutomationId="LabelTitle"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemTextStyle}"
+                                            FontSize="16"
+                                            FontAttributes="Bold"/>
+                                        <Label Text="{Binding ReleaseDate, StringFormat='{0:D}'}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            FontSize="13"/>
+                                        <Label Text="{Binding GenresNames}"
+                                            LineBreakMode="WordWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            FontSize="13"/>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding VoteAverage}"
+                                                LineBreakMode="NoWrap"
+                                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                                FontSize="13"/>
+                                            <Image Source="ic_grade_black.png" HeightRequest="15"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior 
+                        EventName="ItemTapped" 
+                        Command="{Binding ShowMovieDetailCommand}"
+                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                    <b:EventToCommandBehavior
+                        EventName="ItemAppearing" 
+                        Command="{Binding ItemAppearingCommand}"
+                        EventArgsConverter="{StaticResource itemAppearingEventArgsConverter}" />
+                </ListView.Behaviors>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
