@@ -14,7 +14,7 @@ namespace TheMovie.UITest
             {
                 return ConfigureApp
                     .Android
-                    .ApkFile("../../../../TheMovie.Android/bin/Release/com.jairzjunior.themovie.apk")
+                    .InstalledApp("com.jairzjunior.themovie")
                     .StartApp();
             }
 

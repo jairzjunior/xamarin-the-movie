@@ -20,7 +20,7 @@
             AutomationId="Search"            
             Text="Search"
             Icon="ic_search_white.png" 
-            Command="{Binding SearchMoviesCommand}"/>
+            Command="{Binding ShowSearchMoviesCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

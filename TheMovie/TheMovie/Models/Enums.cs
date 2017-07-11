@@ -29,6 +29,27 @@
                 default:
                     return "";
             }
-        }        
+        }
+
+        public static string NameCategoryMovie(MovieCategory category)
+        {
+            switch (category)
+            {
+                case MovieCategory.NowPlaying:
+                    return "Now Playing";
+
+                case MovieCategory.Upcoming:
+                    return "Upcoming";
+
+                case MovieCategory.Popular:
+                    return "Popular";
+
+                case MovieCategory.TopRated:
+                    return "Top Rated";
+
+                default:
+                    return "";
+            }
+        }
     }
 }
