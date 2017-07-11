@@ -68,8 +68,7 @@ namespace TheMovie.ViewModels
 
             if (SearchResults.Count == 0)
             {
-                await pageDialogService.DisplayAlertAsync("The Movie", "No results found.", "Ok").ConfigureAwait(false);
-                return;
+                await pageDialogService.DisplayAlertAsync("The Movie", "No results found.", "Ok").ConfigureAwait(false);                
             }
         }
 
