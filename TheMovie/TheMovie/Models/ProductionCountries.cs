@@ -10,5 +10,4 @@ namespace TheMovie.Models
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
     }
-
 }

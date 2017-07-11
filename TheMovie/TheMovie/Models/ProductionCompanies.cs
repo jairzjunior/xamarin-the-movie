@@ -10,5 +10,4 @@ namespace TheMovie.Models
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
     }
-
 }

@@ -16,5 +16,4 @@ namespace TheMovie.Models
         [JsonProperty(PropertyName = "backdrop_path")]
         public string BackdropPath { get; set; }
     }
-
 }

@@ -54,7 +54,7 @@ namespace TheMovie.ViewModels
         {
             IsConnected = CrossConnectivity.Current.IsConnected;
 
-            if ((IsBusy) || (!IsConnected))
+            if (IsBusy || !IsConnected)
                 return;
 
             IsBusy = true;

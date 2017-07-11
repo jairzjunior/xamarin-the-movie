@@ -111,20 +111,7 @@ namespace TheMovie.UITest
             app.PressEnter();
 
             var titles = new List<string>();
-
-            for (int i = 0; i < totalScroll; i++)
-            {
-                AppResult[] result = app.Query("LabelTitle");
-                foreach (var item in result)
-                {
-                    if (titles.Find(a => a.Equals(item.Text)) == null)
-                    {
-                        titles.Add(item.Text);
-                    }
-                }
-                
-                app.ScrollDown();
-            }                                  
+            PaginationMovies(totalScroll, titles);
 
             Assert.GreaterOrEqual(titles.Count, minMoviesExpected);            
         }
@@ -137,7 +124,25 @@ namespace TheMovie.UITest
             const int totalScroll = 50;
 
             var titles = new List<string>();
+            PaginationMovies(totalScroll, titles);
 
+            Assert.GreaterOrEqual(titles.Count, minMoviesExpected);
+        }        
+
+        [Test]
+        [Category("UI Test")]
+        public void UpcomingMovieSelectItem()
+        {            
+            app.Tap(c => c.Marked("ImageViewCell"));
+            app.ScrollDown();
+            app.ScrollUp();
+            
+            AppResult[] title = app.Query("LabelTitle");
+            Assert.AreNotEqual("", title);            
+        }
+
+        private void PaginationMovies(int totalScroll, List<string> titles)
+        {
             for (int i = 0; i < totalScroll; i++)
             {
                 AppResult[] result = app.Query("LabelTitle");
@@ -151,20 +156,6 @@ namespace TheMovie.UITest
 
                 app.ScrollDown();
             }
-
-            Assert.GreaterOrEqual(titles.Count, minMoviesExpected);            
-        }
-
-        [Test]
-        [Category("UI Test")]
-        public void UpcomingMovieSelectItem()
-        {            
-            app.Tap(c => c.Marked("ImageViewCell"));
-            app.ScrollDown();
-            app.ScrollUp();
-            
-            AppResult[] title = app.Query("LabelTitle");
-            Assert.AreNotEqual("", title);            
         }
     }
 }

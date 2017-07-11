@@ -21,7 +21,10 @@ namespace TheMovie.ViewModels
         private string searchTerm;
         public string SearchTerm
         {
-            get { return searchTerm; }
+            get 
+            { 
+                return searchTerm;
+            }
             set
             {
                 SetProperty(ref searchTerm, value);                
