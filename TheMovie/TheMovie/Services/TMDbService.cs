@@ -24,13 +24,7 @@ namespace TheMovie.Services
         private const string genreListPath = "/genre/list";
 
         private readonly string language = CultureInfo.CurrentCulture.Name;
-
-        /// <summary>
-        /// Search movies using search term and return an object with list of the movies by page.
-        /// </summary>
-        /// <param name="searchTerm"></param>
-        /// <param name="page"></param>
-        /// <returns></returns>
+        
         public async Task<SearchMovie> SearchMoviesAsync(string searchTerm, int page)
         {            
             var httpClient = new HttpClient();
@@ -57,13 +51,7 @@ namespace TheMovie.Services
 
             return null;
         }
-        
-        /// <summary>
-        /// Search movies using category and return an object with list of the movies by page.
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="category"></param>
-        /// <returns></returns>
+                
         public async Task<SearchMovie> GetMoviesByCategoryAsync(int page, Enums.MovieCategory category)
         {            
             var httpClient = new HttpClient();
@@ -90,13 +78,7 @@ namespace TheMovie.Services
 
             return null;
         }
-
-
-        /// <summary>
-        /// Get detail of the movie by id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        
         public async Task<MovieDetail> GetMovieDetailAsync(int id)
         {            
             var httpClient = new HttpClient();
@@ -123,11 +105,7 @@ namespace TheMovie.Services
 
             return null;
         }
-
-        /// <summary>
-        /// Get list of the genres.
-        /// </summary>
-        /// <returns></returns>
+        
         public async Task<List<Genre>> GetGenresAsync()
         {
             var httpClient = new HttpClient();

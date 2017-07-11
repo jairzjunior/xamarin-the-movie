@@ -49,7 +49,7 @@ namespace TheMovie.ViewModels
             ItemAppearingCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteItemAppearingCommand(movie).ConfigureAwait(false));
         }
 
-        private async Task ExecuteSearchCommand()
+        public async Task ExecuteSearchCommand()
         {
             if (IsBusy)
                 return;
@@ -59,7 +59,7 @@ namespace TheMovie.ViewModels
             {
                 SearchResults.Clear();
                 currentPage = 1;
-                await LoadAsync(currentPage).ConfigureAwait(false);
+                await LoadAsync(currentPage).ConfigureAwait(true);
             }
             finally
             {
@@ -73,14 +73,14 @@ namespace TheMovie.ViewModels
             }
         }
 
-        private async Task ExecuteShowMovieDetailCommand(Movie movie)
+        public async Task ExecuteShowMovieDetailCommand(Movie movie)
         {            
-            var p = new NavigationParameters();
-            p.Add(nameof(movie), movie);
-            await navigationService.NavigateAsync("MovieDetailPage", p).ConfigureAwait(false);
+            var parameters = new NavigationParameters();
+            parameters.Add(nameof(movie), movie);
+            await navigationService.NavigateAsync("MovieDetailPage", parameters).ConfigureAwait(false);
         }
 
-        private async Task ExecuteItemAppearingCommand(Movie movie)
+        public async Task ExecuteItemAppearingCommand(Movie movie)
         {            
             int itemLoadNextItem = 2;
             int viewCellIndex = SearchResults.IndexOf(movie);
@@ -90,7 +90,7 @@ namespace TheMovie.ViewModels
             }
         }
 
-        public async Task NextPageAsync()
+        private async Task NextPageAsync()
         {
             currentPage++;
             if (currentPage <= totalPage)

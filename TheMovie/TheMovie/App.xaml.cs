@@ -5,8 +5,9 @@ using Xamarin.Forms;
 namespace TheMovie
 {
     public partial class App : PrismApplication
-    {
+    {        
         public App() : base(null) { }
+        public App(IPlatformInitializer initializer) : base(initializer) { }
 
         protected override void OnInitialized()
         {
