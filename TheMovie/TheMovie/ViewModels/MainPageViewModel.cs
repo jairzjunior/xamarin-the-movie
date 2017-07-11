@@ -31,7 +31,7 @@ namespace TheMovie.ViewModels
         public ObservableRangeCollection<Movie> Movies { get; set; }
 
         public DelegateCommand LoadUpcomingMoviesCommand { get; }
-        public DelegateCommand SearchMoviesCommand { get; }        
+        public DelegateCommand ShowSearchMoviesCommand { get; }        
         public DelegateCommand<Movie> ShowMovieDetailCommand { get; }
         public DelegateCommand<Movie> ItemAppearingCommand { get; }
 
@@ -43,14 +43,14 @@ namespace TheMovie.ViewModels
             Movies = new ObservableRangeCollection<Movie>();
 
             LoadUpcomingMoviesCommand = new DelegateCommand(async () => await ExecuteLoadUpcomingMoviesCommand().ConfigureAwait(false));
-            SearchMoviesCommand = new DelegateCommand(async () => await ExecuteSearchMoviesCommand().ConfigureAwait(false));
+            ShowSearchMoviesCommand = new DelegateCommand(async () => await ExecuteShowSearchMoviesCommand().ConfigureAwait(false));
             ShowMovieDetailCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteShowMovieDetailCommand(movie).ConfigureAwait(false));
             ItemAppearingCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteItemAppearingCommand(movie).ConfigureAwait(false));
 
             LoadUpcomingMoviesCommand.Execute();
         }        
 
-        private async Task ExecuteLoadUpcomingMoviesCommand()
+        public async Task ExecuteLoadUpcomingMoviesCommand()
         {
             IsConnected = CrossConnectivity.Current.IsConnected;
 
@@ -71,19 +71,19 @@ namespace TheMovie.ViewModels
             }
         }
 
-        private async Task ExecuteSearchMoviesCommand()
+        public async Task ExecuteShowSearchMoviesCommand()
         {            
             await navigationService.NavigateAsync("SearchMoviesPage").ConfigureAwait(false);
         }
 
-        private async Task ExecuteShowMovieDetailCommand(Movie movie)
+        public async Task ExecuteShowMovieDetailCommand(Movie movie)
         {            
-            var p = new NavigationParameters();
-            p.Add(nameof(movie), movie);
-            await navigationService.NavigateAsync("MovieDetailPage", p).ConfigureAwait(false);
+            var parameters = new NavigationParameters();
+            parameters.Add(nameof(movie), movie);
+            await navigationService.NavigateAsync("MovieDetailPage", parameters).ConfigureAwait(false);
         }
 
-        private async Task ExecuteItemAppearingCommand(Movie movie)
+        public async Task ExecuteItemAppearingCommand(Movie movie)
         {
             int itemLoadNextItem = 2;
             int viewCellIndex = Movies.IndexOf(movie);
@@ -137,7 +137,7 @@ namespace TheMovie.ViewModels
         private void GenreListToString(List<Genre> genres, Movie item)
         {            
             StringBuilder genresNames = new StringBuilder();
-            for (int i = 0; i < item.GenreIds.Length; i++)
+            for (int i = 0; i < item.GenreIds?.Length; i++)
             {
                 var genreId = item.GenreIds[i];                
                 var genreName = genres.FirstOrDefault(g => g.Id == genreId)?.Name;

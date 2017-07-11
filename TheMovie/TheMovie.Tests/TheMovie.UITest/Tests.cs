@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -23,12 +24,14 @@ namespace TheMovie.UITest
         }
 
         [Test]
+        [Category("UI Test")]        
         public void AppLaunches()
         {
             app.Screenshot("First screen.");
         }
 
         [Test]
+        [Category("UI Test")]
         public void SearchMovieByTitles()
         {
             var searchTerms = new string[] 
@@ -60,6 +63,7 @@ namespace TheMovie.UITest
         }
 
         [Test]
+        [Category("UI Test")]
         public void SearchMovieByTitleSelectItem()
         {
             const string searchTerm = "Mad Max";
@@ -77,12 +81,30 @@ namespace TheMovie.UITest
         }
 
         [Test]
+        [Category("UI Test")]
+        public void SearchMovieWithoutResultByTitle()
+        {
+            const string searchTerm = "_WithoutResult_";
+            const string resultMessage = "No results found.";
+
+            app.Tap(c => c.Marked("Search"));
+            app.EnterText(c => c.Marked("SearchBar"), searchTerm);
+            app.PressEnter();
+            
+            Thread.Sleep(millisecondsTimeout: 5000);
+
+            AppResult[] results = app.Query("message");
+            Assert.AreEqual(resultMessage, results[0].Text);            
+        }
+
+        [Test]
+        [Category("UI Test")]
         public void SearchMoviePagination()
         {
             const int minMoviesExpected = 40;
             const int totalScroll = 50;
 
-            const string searchTerm = "a";
+            const string searchTerm = "Spider";
 
             app.Tap(c => c.Marked("Search"));
             app.EnterText(c => c.Marked("SearchBar"), searchTerm);
@@ -108,6 +130,7 @@ namespace TheMovie.UITest
         }
 
         [Test]
+        [Category("UI Test")]
         public void UpcomingMoviePagination()
         {
             const int minMoviesExpected = 40;
@@ -133,6 +156,7 @@ namespace TheMovie.UITest
         }
 
         [Test]
+        [Category("UI Test")]
         public void UpcomingMovieSelectItem()
         {            
             app.Tap(c => c.Marked("ImageViewCell"));
