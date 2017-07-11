@@ -1,4 +1,8 @@
-﻿using Prism.Unity;
+﻿using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.Azure.Mobile.Crashes;
+using Microsoft.Azure.Mobile.Distribute;
+using Prism.Unity;
 using TheMovie.Views;
 using Xamarin.Forms;
 
@@ -22,6 +26,19 @@ namespace TheMovie
             Container.RegisterTypeForNavigation<MainPage>();
             Container.RegisterTypeForNavigation<SearchMoviesPage>();
             Container.RegisterTypeForNavigation<MovieDetailPage>();            
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            MobileCenter.Start(
+                "android=0c100be3-d3e4-4653-b602-8efe90e6ef2f;" +
+                "uwp=c10a525c-3170-4504-a567-aec798cc7be9;" +
+                "ios=22a3003b-75e6-4058-a798-ad45a8e0d6a6;",
+                typeof(Analytics), 
+                typeof(Crashes),
+                typeof(Distribute)
+            );
         }
     }
 }
