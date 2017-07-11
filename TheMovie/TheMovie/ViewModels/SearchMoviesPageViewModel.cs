@@ -49,7 +49,7 @@ namespace TheMovie.ViewModels
             ItemAppearingCommand = new DelegateCommand<Movie>(async (Movie movie) => await ExecuteItemAppearingCommand(movie).ConfigureAwait(false));
         }
 
-        public async Task ExecuteSearchCommand()
+        private async Task ExecuteSearchCommand()
         {
             if (IsBusy)
                 return;
@@ -73,14 +73,14 @@ namespace TheMovie.ViewModels
             }
         }
 
-        public async Task ExecuteShowMovieDetailCommand(Movie movie)
+        private async Task ExecuteShowMovieDetailCommand(Movie movie)
         {            
             var parameters = new NavigationParameters();
             parameters.Add(nameof(movie), movie);
             await navigationService.NavigateAsync("MovieDetailPage", parameters).ConfigureAwait(false);
         }
 
-        public async Task ExecuteItemAppearingCommand(Movie movie)
+        private async Task ExecuteItemAppearingCommand(Movie movie)
         {            
             int itemLoadNextItem = 2;
             int viewCellIndex = SearchResults.IndexOf(movie);

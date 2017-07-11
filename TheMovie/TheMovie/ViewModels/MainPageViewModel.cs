@@ -50,7 +50,7 @@ namespace TheMovie.ViewModels
             LoadUpcomingMoviesCommand.Execute();
         }        
 
-        public async Task ExecuteLoadUpcomingMoviesCommand()
+        private async Task ExecuteLoadUpcomingMoviesCommand()
         {
             IsConnected = CrossConnectivity.Current.IsConnected;
 
@@ -71,19 +71,19 @@ namespace TheMovie.ViewModels
             }
         }
 
-        public async Task ExecuteShowSearchMoviesCommand()
+        private async Task ExecuteShowSearchMoviesCommand()
         {            
             await navigationService.NavigateAsync("SearchMoviesPage").ConfigureAwait(false);
         }
 
-        public async Task ExecuteShowMovieDetailCommand(Movie movie)
+        private async Task ExecuteShowMovieDetailCommand(Movie movie)
         {            
             var parameters = new NavigationParameters();
             parameters.Add(nameof(movie), movie);
             await navigationService.NavigateAsync("MovieDetailPage", parameters).ConfigureAwait(false);
         }
 
-        public async Task ExecuteItemAppearingCommand(Movie movie)
+        private async Task ExecuteItemAppearingCommand(Movie movie)
         {
             int itemLoadNextItem = 2;
             int viewCellIndex = Movies.IndexOf(movie);

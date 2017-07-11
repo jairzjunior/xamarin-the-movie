@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System.Linq;
-using System.Threading.Tasks;
 using TheMovie.UnitTest.Mocks;
 using TheMovie.UnitTest.Mocks.Views;
 using TheMovie.ViewModels;
@@ -22,41 +21,41 @@ namespace TheMovie.UnitTest.ViewModels
 
         [Test]
         [Category("Unit Test")]
-        public async Task LoadUpcomingMovies()
+        public void LoadUpcomingMovies()
         {
-            await viewModel.ExecuteLoadUpcomingMoviesCommand();            
+            viewModel.LoadUpcomingMoviesCommand.Execute();            
             Assert.AreNotEqual(0, viewModel.Movies.Count());
         }
 
         [Test]
         [Category("Unit Test")]
-        public async Task LoadUpcomingMoviesPagination()
+        public void LoadUpcomingMoviesPagination()
         {
             const int minMoviesExpected = 40;
-            await viewModel.ExecuteLoadUpcomingMoviesCommand();
-            await viewModel.ExecuteItemAppearingCommand(viewModel.Movies.Last());
-            await viewModel.ExecuteItemAppearingCommand(viewModel.Movies.Last());
-            await viewModel.ExecuteItemAppearingCommand(viewModel.Movies.Last());
+            viewModel.LoadUpcomingMoviesCommand.Execute();
+            viewModel.ItemAppearingCommand.Execute(viewModel.Movies.Last());
+            viewModel.ItemAppearingCommand.Execute(viewModel.Movies.Last());
+            viewModel.ItemAppearingCommand.Execute(viewModel.Movies.Last());
             Assert.IsTrue(viewModel.Movies.Count() > minMoviesExpected);
         }
 
         [Test]
         [Category("Unit Test")]
-        public async Task ShowSearchMovies()
+        public void ShowSearchMovies()
         {            
             var nameView = new SearchMoviesPageMock().ToString();
-            await viewModel.ExecuteShowSearchMoviesCommand();
+            viewModel.ShowSearchMoviesCommand.Execute();
             var nameCurrentView = app.MainPage.Navigation.NavigationStack.FirstOrDefault().ToString();
             Assert.AreEqual(nameView, nameCurrentView);
         }
 
         [Test]
         [Category("Unit Test")]
-        public async Task ShowMovieDetail()
+        public void ShowMovieDetail()
         {            
             var nameView = new MovieDetailPageMock().ToString();
             var movie = viewModel.Movies.FirstOrDefault();
-            await viewModel.ExecuteShowMovieDetailCommand(movie);
+            viewModel.ShowMovieDetailCommand.Execute(movie);
             var nameCurrentView = app.MainPage.Navigation.NavigationStack.FirstOrDefault().ToString();
             Assert.AreEqual(nameView, nameCurrentView);
         }        
