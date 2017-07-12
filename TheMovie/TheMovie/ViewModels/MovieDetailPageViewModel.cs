@@ -6,34 +6,27 @@ namespace TheMovie.ViewModels
 {
     public class MovieDetailPageViewModel : BaseViewModel, INavigationAware
     {
-        private MovieDetail movieDetail;
-        public MovieDetail MovieDetail
+        private Movie movie;
+        public Movie Movie
         {
-            get { return movieDetail; }
-            set { SetProperty(ref movieDetail, value); }
+            get { return movie; }
+            set { SetProperty(ref movie, value); }
         }        
   
-        private async Task LoadMovieAsync(int movieId)
+        private async Task LoadMovieDetailAsync(int movieId)
         {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-            try
+            var movieDetail = await ApiService.GetMovieDetailAsync(movieId).ConfigureAwait(false);
+            if (movieDetail != null)
             {
-                MovieDetail = await ApiService.GetMovieDetailAsync(movieId).ConfigureAwait(false);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                Movie = movieDetail;
+            }            
         }
 
         public async void OnNavigatingTo(NavigationParameters parameters)
         {
-            var movie = parameters.GetValue<Movie>("movie");
-            Title = movie.Title;
-            await LoadMovieAsync(movie.Id).ConfigureAwait(false);
+            Movie = parameters.GetValue<Movie>("movie");            
+            Title = Movie.Title;
+            await LoadMovieDetailAsync(Movie.Id).ConfigureAwait(false);
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)

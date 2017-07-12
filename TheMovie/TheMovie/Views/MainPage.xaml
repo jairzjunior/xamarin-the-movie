@@ -35,6 +35,7 @@
                         Command="{Binding LoadUpcomingMoviesCommand}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
+                        WidthRequest="100"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White"/>
                 </StackLayout>
@@ -57,7 +58,7 @@
                                     <ffimageloading:CachedImage
                                         AutomationId="ImageViewCell"
                                         WidthRequest="100"
-                                        Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
+                                        Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w154/{0}'}"
                                         LoadingPlaceholder="placeholder_portrait.png"
                                         DownsampleToViewSize="True"/>
                                     <StackLayout Margin="5" Orientation="Vertical">

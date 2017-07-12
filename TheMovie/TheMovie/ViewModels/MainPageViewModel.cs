@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using TheMovie.Helpers;
@@ -108,7 +107,7 @@ namespace TheMovie.ViewModels
                     totalPage = searchMovie.TotalPages;
                     foreach (var movie in searchMovie.Movies)
                     {                                                
-                        GenreListToString(genres, movie);
+                        GenreListToString(movie);                        
                         movies.Add(movie);
                     }
                     Movies.AddRange(movies);
@@ -131,20 +130,14 @@ namespace TheMovie.ViewModels
 
         /// <summary>
         /// Converter the genres of the movies to a string.
-        /// </summary>
-        /// <param name="genres"></param>
-        /// <param name="item"></param>
-        private void GenreListToString(List<Genre> genres, Movie item)
-        {            
-            StringBuilder genresNames = new StringBuilder();
-            for (int i = 0; i < item.GenreIds?.Length; i++)
-            {
-                var genreId = item.GenreIds[i];                
-                var genreName = genres.FirstOrDefault(g => g.Id == genreId)?.Name;
-                genreName += i < (item.GenreIds.Length - 1) ? ", " : "";
-                genresNames.Append(genreName);
-            }
-            item.GenresNames = genresNames.ToString();
-        }        
+        /// </summary>        
+        /// <param name="movie"></param>
+        private void GenreListToString(Movie movie)
+        {
+            var genresMovie = genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id));
+            movie.GenresNames = genresMovie != null ?
+                genresMovie.Select(g => g.Name).Aggregate((first, second) => $"{first}, {second}") :
+                "Undefined";            
+        }
     }
 }

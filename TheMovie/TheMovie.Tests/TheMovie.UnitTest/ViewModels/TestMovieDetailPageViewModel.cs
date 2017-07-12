@@ -32,7 +32,7 @@ namespace TheMovie.UnitTest.ViewModels
             parameters.Add(nameof(movie), movie);
 
             viewModel.OnNavigatingTo(parameters);            
-            Assert.AreNotEqual(null, viewModel.MovieDetail);
+            Assert.AreNotEqual(null, viewModel.Movie);
         }        
     }
 }

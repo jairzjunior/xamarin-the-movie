@@ -4,7 +4,7 @@ using System;
 namespace TheMovie.Models
 {
     public class Movie
-    {        
+    {
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
 
@@ -48,6 +48,6 @@ namespace TheMovie.Models
         public string Overview { get; set; }
 
         [JsonProperty(PropertyName = "release_date")]
-        public DateTime? ReleaseDate { get; set; }        
+        public DateTimeOffset? ReleaseDate { get; set; }        
     }
 }

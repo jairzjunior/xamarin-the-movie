@@ -12,37 +12,37 @@
             <c:NegateBooleanConverter x:Key="inverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource inverter}}">
+    <ScrollView>
         <StackLayout Padding="5">
             <Frame Padding="0" Margin="5">
                 <StackLayout Spacing="5">
                     <ffimageloading:CachedImage                        
-                        Source="{Binding MovieDetail.BackdropPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
+                        Source="{Binding Movie.BackdropPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
                         LoadingPlaceholder="placeholder_landscape.png"/>
                     <StackLayout Spacing="5" Margin="5">
                         <Label Text="Title" FontSize="Medium" FontAttributes="Bold"/>
-                        <Label AutomationId="LabelTitle" Text="{Binding MovieDetail.Title}" FontSize="Small"/>
+                        <Label AutomationId="LabelTitle" Text="{Binding Movie.Title}" FontSize="Small"/>
 
                         <Label Text="Original Title" FontSize="Medium" FontAttributes="Bold"/>
-                        <Label Text="{Binding MovieDetail.OriginalTitle}" FontSize="Small"/>
+                        <Label Text="{Binding Movie.OriginalTitle}" FontSize="Small"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>
             <Frame Padding="0" Margin="5">
                 <StackLayout Spacing="5" Margin="5">
                     <Label Text="Overview" FontSize="Medium" FontAttributes="Bold"/>
-                    <Label Text="{Binding MovieDetail.Overview}" FontSize="Small"/>
+                    <Label Text="{Binding Movie.Overview}" FontSize="Small"/>
 
                     <Label Text="Release Date" FontSize="Medium" FontAttributes="Bold"/>
-                    <Label Text="{Binding MovieDetail.ReleaseDate, StringFormat='{0:D}'}" FontSize="Small"/>
+                    <Label Text="{Binding Movie.ReleaseDate, StringFormat='{0:D}'}" FontSize="Small"/>
                 </StackLayout>
             </Frame>
             <Frame HeightRequest="250" Padding="0" Margin="5">
                 <StackLayout Spacing="5" Margin="5">
                     <Label Text="Genres" FontSize="Medium" FontAttributes="Bold"/>
-                    <ListView 
+                    <ListView
                         x:Name="GenresListView"                        
-                        ItemsSource="{Binding MovieDetail.Genres}"
+                        ItemsSource="{Binding Movie.Genres}"
                         VerticalOptions="FillAndExpand"                        
                         HasUnevenRows="true"
                         CachingStrategy="RecycleElement">
