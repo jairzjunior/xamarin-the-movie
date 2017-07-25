@@ -1,5 +1,8 @@
 ﻿{
   "dependencies": {
+    "Microsoft.Azure.Mobile": "0.14.0",
+    "Microsoft.Azure.Mobile.Analytics": "0.14.0",
+    "Microsoft.Azure.Mobile.Crashes": "0.14.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "Prism.Core": "6.3.0",
     "Prism.Forms": "6.3.0",
