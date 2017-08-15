@@ -57,6 +57,7 @@ namespace TheMovie.UITest
                 
                 AppResult[] results = app.Query("search_src_text");
                 Assert.AreEqual(searchTerm, results[0].Text);
+                app.Screenshot(searchTerm);
 
                 app.ClearText(c => c.Marked("SearchBar"));
             }            
@@ -72,12 +73,14 @@ namespace TheMovie.UITest
             app.EnterText(c => c.Marked("SearchBar"), searchTerm);
             app.PressEnter();
             app.Tap(c => c.Marked("ImageViewCell"));
+            Thread.Sleep(1000);
             app.ScrollDown();
             app.ScrollUp();
             app.Back();
 
             AppResult[] results = app.Query("search_src_text");
-            Assert.AreEqual(searchTerm, results[0].Text);            
+            Assert.AreEqual(searchTerm, results[0].Text);
+            app.Screenshot(searchTerm);
         }
 
         [Test]
@@ -94,14 +97,15 @@ namespace TheMovie.UITest
             Thread.Sleep(millisecondsTimeout: 5000);
 
             AppResult[] results = app.Query("message");
-            Assert.AreEqual(resultMessage, results[0].Text);            
+            Assert.AreEqual(resultMessage, results[0].Text);
+            app.Screenshot("Without Result");
         }
 
         [Test]
         [Category("UI Test")]
         public void SearchMoviePagination()
         {
-            const int minMoviesExpected = 40;
+            const int minMoviesExpected = 30;
             const int totalScroll = 50;
 
             const string searchTerm = "Spider";
@@ -120,7 +124,7 @@ namespace TheMovie.UITest
         [Category("UI Test")]
         public void UpcomingMoviePagination()
         {
-            const int minMoviesExpected = 40;
+            const int minMoviesExpected = 30;
             const int totalScroll = 50;
 
             var titles = new List<string>();
@@ -134,11 +138,18 @@ namespace TheMovie.UITest
         public void UpcomingMovieSelectItem()
         {            
             app.Tap(c => c.Marked("ImageViewCell"));
-            app.ScrollDown();
-            app.ScrollUp();
-            
+            Thread.Sleep(1000);
             AppResult[] title = app.Query("LabelTitle");
-            Assert.AreNotEqual("", title);            
+            
+            if (title.Length == 0)
+            {
+                app.ScrollDown();
+                title = app.Query("LabelTitle");
+            }
+            
+            Assert.AreNotEqual("", title);
+
+            app.Screenshot("Movie Selected");
         }
 
         private void PaginationMovies(int totalScroll, List<string> titles)

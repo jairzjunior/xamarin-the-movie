@@ -42,8 +42,8 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Connectivity, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Xam.Plugin.Connectivity.3.0.1\lib\net45\Plugin.Connectivity.dll</HintPath>
@@ -78,9 +78,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mocks\PageDialogServiceMock.cs" />
+    <Compile Include="Fakes\Services\TmdbServiceFake.cs" />
+    <Compile Include="Mocks\Services\PageDialogServiceMock.cs" />
     <Compile Include="Mocks\PrismApplicationMock.cs" />
-    <Compile Include="Mocks\TmdbServiceMock.cs" />
     <Compile Include="Mocks\Views\MainPageMock.cs" />
     <Compile Include="Mocks\Views\MovieDetailPageMock.cs" />
     <Compile Include="Mocks\Views\SearchMoviesPageMock.cs" />

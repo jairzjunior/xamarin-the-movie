@@ -2,6 +2,7 @@
 using System.Linq;
 using TheMovie.UnitTest.Mocks;
 using TheMovie.UnitTest.Mocks.Views;
+using TheMovie.UnitTest.Mocks.Services;
 using TheMovie.ViewModels;
 
 namespace TheMovie.UnitTest.ViewModels

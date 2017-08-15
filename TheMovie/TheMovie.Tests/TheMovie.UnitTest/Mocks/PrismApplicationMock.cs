@@ -2,6 +2,7 @@
 using Prism.Unity;
 using TheMovie.Interfaces;
 using TheMovie.UnitTest.Mocks.Views;
+using TheMovie.UnitTest.Fakes.Services;
 using TheMovie.Views;
 using Xamarin.Forms;
 
@@ -22,7 +23,7 @@ namespace TheMovie.UnitTest.Mocks
             Container.RegisterTypeForNavigation<MainPageMock>(nameof(MainPage));
             Container.RegisterTypeForNavigation<SearchMoviesPageMock>(nameof(SearchMoviesPage));
             Container.RegisterTypeForNavigation<MovieDetailPageMock>(nameof(MovieDetailPage));
-            DependencyService.Register<IApiService, TmdbServiceMock>();
+            DependencyService.Register<IApiService, TmdbServiceFake>();
         }
 
         public INavigationService CreateNavigationServiceForPage(Page page)

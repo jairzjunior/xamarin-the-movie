@@ -133,9 +133,9 @@ namespace TheMovie.ViewModels
         /// </summary>        
         /// <param name="movie"></param>
         private void GenreListToString(Movie movie)
-        {
+        {            
             var genresMovie = genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id));
-            movie.GenresNames = genresMovie != null ?
+            movie.GenresNames = movie.GenreIds != null && genresMovie != null ?
                 genresMovie.Select(g => g.Name).Aggregate((first, second) => $"{first}, {second}") :
                 "Undefined";            
         }

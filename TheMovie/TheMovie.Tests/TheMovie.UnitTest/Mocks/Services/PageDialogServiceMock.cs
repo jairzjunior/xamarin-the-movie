@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Prism.Services;
 
-namespace TheMovie.UnitTest.Mocks
+namespace TheMovie.UnitTest.Mocks.Services
 {
     public class PageDialogServiceMock : IPageDialogService
     {
