@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 using TheMovie.Helpers;
 using TheMovie.Models;
-using Xamarin.Forms;
 
 namespace TheMovie.ViewModels
 {
@@ -76,9 +75,11 @@ namespace TheMovie.ViewModels
         }
 
         private async Task ExecuteShowMovieDetailCommand(Movie movie)
-        {            
-            var parameters = new NavigationParameters();
-            parameters.Add(nameof(movie), movie);
+        {
+            var parameters = new NavigationParameters
+            {
+                { nameof(movie), movie }
+            };
             await navigationService.NavigateAsync("MovieDetailPage", parameters).ConfigureAwait(false);
         }
 
@@ -96,22 +97,22 @@ namespace TheMovie.ViewModels
         {
             try
             {
-                // Added to configure "ConfigureAwait(true)" on Windows
-                var continueOnCapturedContext = Device.RuntimePlatform == Device.Windows;
-
-                genres = genres ?? await ApiService.GetGenresAsync().ConfigureAwait(continueOnCapturedContext);
-                var searchMovie = await ApiService.GetMoviesByCategoryAsync(page, movieCategory).ConfigureAwait(continueOnCapturedContext);
-                if (searchMovie != null)
+                genres = genres ?? await ApiService.GetGenresAsync().ConfigureAwait(false);
+                var searchMovies = await ApiService.GetMoviesByCategoryAsync(page, movieCategory).ConfigureAwait(false);
+                if (searchMovies != null)
                 {
                     var movies = new List<Movie>();
-                    totalPage = searchMovie.TotalPages;
-                    foreach (var movie in searchMovie.Movies)
-                    {                                                
-                        GenreListToString(movie);                        
+                    totalPage = searchMovies.TotalPages;
+                    foreach (var movie in searchMovies.Movies)
+                    {
+                        movie.Genres = 
+                            movie.Genres ??
+                            genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id)).ToArray();
+
                         movies.Add(movie);
                     }
                     Movies.AddRange(movies);
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -126,18 +127,6 @@ namespace TheMovie.ViewModels
             {                
                 await LoadMoviesAsync(currentPage, Enums.MovieCategory.Upcoming).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// Converter the genres of the movies to a string.
-        /// </summary>        
-        /// <param name="movie"></param>
-        private void GenreListToString(Movie movie)
-        {            
-            var genresMovie = genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id));
-            movie.GenresNames = movie.GenreIds != null && genresMovie != null ?
-                genresMovie.Select(g => g.Name).Aggregate((first, second) => $"{first}, {second}") :
-                "Undefined";            
         }
     }
 }

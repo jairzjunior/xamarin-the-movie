@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="fc423664-9d25-423c-98df-ee7bf1f51526" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>TheMovie.UWP</DisplayName>
-    <PublisherDisplayName>jairz</PublisherDisplayName>
+    <PublisherDisplayName>jairzjunior</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>

@@ -8,10 +8,7 @@ namespace TheMovie.Models
         public BelongsToCollection BelongsToCollection { get; set; }
 
         [JsonProperty(PropertyName = "budget")]
-        public int? Budget { get; set; }
-
-        [JsonProperty(PropertyName = "genres")]
-        public Genre[] Genres { get; set; }
+        public int? Budget { get; set; }        
 
         [JsonProperty(PropertyName = "homepage")]
         public string Homepage { get; set; }        

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             xmlns:c="clr-namespace:TheMovie.Converters;assembly=TheMovie"             
-             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:cells="clr-namespace:TheMovie.Cells;assembly=TheMovie"
+             xmlns:converters="clr-namespace:TheMovie.Converters;assembly=TheMovie"             
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
@@ -10,8 +10,8 @@
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
-            <c:ItemVisibilityEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
+            <converters:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+            <converters:ItemVisibilityEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -24,6 +24,7 @@
                 Text="{Binding SearchTerm}"/>
             <ListView
                 x:Name="ItemsListView"
+                BackgroundColor="{DynamicResource WindowBackground}"
                 AutomationId="ItemsListView"
                 ItemsSource="{Binding SearchResults}"
                 HasUnevenRows="true"
@@ -33,37 +34,16 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame HeightRequest="100" Padding="0" Margin="5">
-                                <StackLayout Orientation="Horizontal">
-                                    <ffimageloading:CachedImage
-                                        AutomationId="ImageViewCell"
-                                        WidthRequest="70"
-                                        Source="{Binding PosterPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
-                                        LoadingPlaceholder="placeholder_portrait.png"
-                                        DownsampleToViewSize="True"/>
-                                    <StackLayout Margin="5" Orientation="Vertical">
-                                        <Label Text="{Binding Title}"
-                                            AutomationId="LabelTitle"
-                                            LineBreakMode="NoWrap"
-                                            Style="{DynamicResource ListItemTextStyle}"
-                                            FontSize="16"
-                                            FontAttributes="Bold"/>
-                                        <Label Text="{Binding ReleaseDate, StringFormat='{0:yyyy}'}"
-                                            LineBreakMode="NoWrap"
-                                            Style="{DynamicResource ListItemDetailTextStyle}"
-                                            FontSize="13"/>
-                                    </StackLayout>
-                                </StackLayout>
-                            </Frame>
+                            <cells:MovieCell/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Behaviors>
-                    <b:EventToCommandBehavior 
+                    <behaviors:EventToCommandBehavior 
                         EventName="ItemTapped" 
                         Command="{Binding ShowMovieDetailCommand}"
                         EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
-                    <b:EventToCommandBehavior
+                    <behaviors:EventToCommandBehavior
                         EventName="ItemAppearing" 
                         Command="{Binding ItemAppearingCommand}"
                         EventArgsConverter="{StaticResource itemAppearingEventArgsConverter}" />

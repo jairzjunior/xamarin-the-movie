@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace TheMovie.Models
 {
@@ -32,11 +33,22 @@ namespace TheMovie.Models
         [JsonProperty(PropertyName = "original_title")]
         public string OriginalTitle { get; set; }
 
+        [JsonProperty(PropertyName = "genres")]
+        public Genre[] Genres { get; set; }
+
         [JsonProperty(PropertyName = "genre_ids")]
         public int?[] GenreIds { get; set; }
 
         [JsonIgnore]
-        public string GenresNames { get; set; }
+        public string GenresNames
+        {
+            get
+            {
+                return (Genres != null && Genres.Count() > 0) ?
+                    Genres.Select(g => g.Name).Aggregate((first, second) => $"{first}, {second}") :
+                    "Undefined";
+            }
+        }
 
         [JsonProperty(PropertyName = "backdrop_path")]
         public string BackdropPath { get; set; }
@@ -46,6 +58,9 @@ namespace TheMovie.Models
 
         [JsonProperty(PropertyName = "overview")]
         public string Overview { get; set; }
+
+        [JsonIgnore]
+        public bool HasOverview { get => !string.IsNullOrWhiteSpace(Overview); }
 
         [JsonProperty(PropertyName = "release_date")]
         public DateTimeOffset? ReleaseDate { get; set; }        

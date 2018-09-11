@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using FFImageLoading.Forms.Droid;
+using FFImageLoading.Forms.Platform;
 
 namespace TheMovie.Droid
 {
@@ -15,7 +15,7 @@ namespace TheMovie.Droid
 
             base.OnCreate(bundle);
 
-            CachedImageRenderer.Init();
+            CachedImageRenderer.Init(enableFastRenderer: true);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 

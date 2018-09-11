@@ -2,7 +2,7 @@
 <prism:PrismApplication 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:prism="clr-namespace:Prism.Unity;assembly=Prism.Unity.Forms"
+    xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
     x:Class="TheMovie.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -13,6 +13,7 @@
             <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
             <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
             <Color x:Key="LightTextColor">#999999</Color>
+            <OnPlatform x:TypeArguments="Color" Android="#F5F5F5" iOS="#F5F5F5" WinPhone="White" x:Key="WindowBackground"/>
 
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />

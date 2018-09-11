@@ -4,15 +4,15 @@ using TheMovie.Models;
 
 namespace TheMovie.ViewModels
 {
-    public class MovieDetailPageViewModel : BaseViewModel, INavigationAware
+    public class MovieDetailPageViewModel : BaseViewModel, INavigatingAware
     {
         private Movie movie;
         public Movie Movie
         {
             get { return movie; }
             set { SetProperty(ref movie, value); }
-        }        
-  
+        }
+
         private async Task LoadMovieDetailAsync(int movieId)
         {
             var movieDetail = await ApiService.GetMovieDetailAsync(movieId).ConfigureAwait(false);
@@ -27,16 +27,6 @@ namespace TheMovie.ViewModels
             Movie = parameters.GetValue<Movie>("movie");            
             Title = Movie.Title;
             await LoadMovieDetailAsync(Movie.Id).ConfigureAwait(false);
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-            // Do nothing, added because of implementation INavigationAware.
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            // Do nothing, added because of implementation INavigationAware.
         }
     }
 }

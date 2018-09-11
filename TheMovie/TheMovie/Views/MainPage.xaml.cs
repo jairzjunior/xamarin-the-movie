@@ -1,10 +1,9 @@
-﻿using Plugin.Connectivity;
-using TheMovie.Interfaces;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace TheMovie.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
         public MainPage()

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<linker>
+  <assembly fullname="TheMovie">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="DryIoc">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="System">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="mscorlib">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="Prism">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="Prism.DryIoc.Forms">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="Prism.Forms">
+    <type fullname="*" />
+  </assembly>
+
+  <assembly fullname="Newtonsoft.Json">
+    <type fullname="*" />
+  </assembly>
+</linker>

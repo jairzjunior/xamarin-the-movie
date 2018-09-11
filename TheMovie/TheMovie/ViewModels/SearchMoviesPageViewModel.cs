@@ -2,13 +2,13 @@
 using Prism.Navigation;
 using Prism.Services;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 using TheMovie.Helpers;
 using TheMovie.Models;
-using Xamarin.Forms;
 
 namespace TheMovie.ViewModels
 {
@@ -16,7 +16,9 @@ namespace TheMovie.ViewModels
     {
         // Variables to control of the pagination
         private int currentPage = 1;
-        private int totalPage = 0;        
+        private int totalPage = 0;
+
+        private List<Genre> genres;
 
         private string searchTerm;
         public string SearchTerm
@@ -76,9 +78,11 @@ namespace TheMovie.ViewModels
         }
 
         private async Task ExecuteShowMovieDetailCommand(Movie movie)
-        {            
-            var parameters = new NavigationParameters();
-            parameters.Add(nameof(movie), movie);
+        {
+            var parameters = new NavigationParameters
+            {
+                { nameof(movie), movie }
+            };
             await navigationService.NavigateAsync("MovieDetailPage", parameters).ConfigureAwait(false);
         }
 
@@ -105,15 +109,21 @@ namespace TheMovie.ViewModels
         {
             try
             {
-                // Added to configure "ConfigureAwait(true)" on Windows                
-                var continueOnCapturedContext = Device.RuntimePlatform == Device.Windows;
-
-                var searchMovies = await ApiService.SearchMoviesAsync(searchTerm, page).ConfigureAwait(continueOnCapturedContext);
-
+                genres = genres ?? await ApiService.GetGenresAsync().ConfigureAwait(false);
+                var searchMovies = await ApiService.SearchMoviesAsync(searchTerm, page).ConfigureAwait(false);
                 if (searchMovies != null)
                 {
-                    totalPage = searchMovies.TotalPages;                    
-                    SearchResults.AddRange(searchMovies.Movies);                    
+                    var movies = new List<Movie>();
+                    totalPage = searchMovies.TotalPages;
+                    foreach (var movie in searchMovies.Movies)
+                    {
+                        movie.Genres =
+                            movie.Genres ??
+                            genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id)).ToArray();
+
+                        movies.Add(movie);
+                    }
+                    SearchResults.AddRange(movies);                    
                 }
             }
             catch (Exception ex)

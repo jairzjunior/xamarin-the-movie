@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"             
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:c="clr-namespace:TheMovie.Converters;assembly=TheMovie"
+             xmlns:converters="clr-namespace:TheMovie.Converters;assembly=TheMovie"
+             xmlns:controls="clr-namespace:TheMovie.Controls;assembly=TheMovie"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"    
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="TheMovie.Views.MovieDetailPage"
+             BackgroundColor="{DynamicResource WindowBackground}"
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <c:NegateBooleanConverter x:Key="inverter"/>
+            <converters:NegateBooleanConverter x:Key="inverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
-        <StackLayout Padding="5">
-            <Frame Padding="0" Margin="5">
-                <StackLayout Spacing="5">
-                    <ffimageloading:CachedImage                        
-                        Source="{Binding Movie.BackdropPath, StringFormat='https://image.tmdb.org/t/p/w640/{0}'}"
-                        LoadingPlaceholder="placeholder_landscape.png"/>
-                    <StackLayout Spacing="5" Margin="5">
+        <StackLayout>
+            <controls:CardView>
+                <StackLayout Spacing="0">
+                    <ffimageloading:CachedImage
+                        HeightRequest="200"
+                        Source="{Binding Movie.BackdropPath, StringFormat='https://image.tmdb.org/t/p/original/{0}'}"
+                        LoadingPlaceholder="placeholder_landscape.png"
+                        DownsampleToViewSize="True"
+                        Aspect="AspectFill"/>
+                    <StackLayout Margin="10">
                         <Label Text="Title" FontSize="Medium" FontAttributes="Bold"/>
                         <Label AutomationId="LabelTitle" Text="{Binding Movie.Title}" FontSize="Small"/>
 
@@ -27,41 +32,23 @@
                         <Label Text="{Binding Movie.OriginalTitle}" FontSize="Small"/>
                     </StackLayout>
                 </StackLayout>
-            </Frame>
-            <Frame Padding="0" Margin="5">
-                <StackLayout Spacing="5" Margin="5">
-                    <Label Text="Overview" FontSize="Medium" FontAttributes="Bold"/>
-                    <Label Text="{Binding Movie.Overview}" FontSize="Small"/>
-
+            </controls:CardView>
+            <controls:CardView>
+                <StackLayout Margin="10">
                     <Label Text="Release Date" FontSize="Medium" FontAttributes="Bold"/>
                     <Label Text="{Binding Movie.ReleaseDate, StringFormat='{0:D}'}" FontSize="Small"/>
-                </StackLayout>
-            </Frame>
-            <Frame HeightRequest="250" Padding="0" Margin="5">
-                <StackLayout Spacing="5" Margin="5">
+
                     <Label Text="Genres" FontSize="Medium" FontAttributes="Bold"/>
-                    <ListView
-                        x:Name="GenresListView"                        
-                        ItemsSource="{Binding Movie.Genres}"
-                        VerticalOptions="FillAndExpand"                        
-                        HasUnevenRows="true"
-                        CachingStrategy="RecycleElement">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout Padding="10">
-                                        <Label 
-                                            Text="{Binding Name}"
-                                            LineBreakMode="NoWrap"
-                                            Style="{DynamicResource ListItemDetailTextStyle}"
-                                            FontSize="13"/>
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <Label Text="{Binding Movie.GenresNames, StringFormat='{0:D}'}" FontSize="Small"/>
                 </StackLayout>
-            </Frame>
+            </controls:CardView>
+            <controls:CardView
+                IsVisible="{Binding Movie.HasOverview, Mode=OneWay}">
+                <StackLayout Margin="10">
+                    <Label Text="Overview" FontSize="Medium" FontAttributes="Bold"/>
+                    <Label Text="{Binding Movie.Overview}" FontSize="Small"/>
+                </StackLayout>
+            </controls:CardView>
         </StackLayout>
     </ScrollView>
 </ContentPage>
