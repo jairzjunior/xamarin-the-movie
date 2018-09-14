@@ -117,9 +117,12 @@ namespace TheMovie.ViewModels
                     totalPage = searchMovies.TotalPages;
                     foreach (var movie in searchMovies.Movies)
                     {
-                        movie.Genres =
-                            movie.Genres ??
-                            genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id)).ToArray();
+                        if (movie.GenreIds != null)
+                        {
+                            movie.Genres =
+                                movie.Genres ??
+                                genres.Where(genre => movie.GenreIds.Any(genreId => genreId == genre.Id)).ToArray();
+                        }                        
 
                         movies.Add(movie);
                     }

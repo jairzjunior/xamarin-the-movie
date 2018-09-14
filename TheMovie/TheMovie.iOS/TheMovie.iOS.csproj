@@ -89,7 +89,6 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Implementations\NativeHelper.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <ImageAsset Include="Assets.xcassets\Contents.json">
@@ -119,9 +118,6 @@
       <Version>11.0.2</Version>
     </PackageReference>
     <PackageReference Include="Prism.DryIoc.Forms">
-      <Version>7.0.0.396</Version>
-    </PackageReference>
-    <PackageReference Include="Prism.Forms">
       <Version>7.0.0.396</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Connectivity">
