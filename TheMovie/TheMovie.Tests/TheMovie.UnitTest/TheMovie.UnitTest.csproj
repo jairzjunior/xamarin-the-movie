@@ -1,146 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.props')" />
-  <Import Project="..\..\..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\..\..\packages\NUnit.3.10.1\build\NUnit.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C68DE07D-3BFE-4D21-BDCF-D51026B8CA57}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TheMovie.UnitTest</RootNamespace>
-    <AssemblyName>TheMovie.UnitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CommonServiceLocator">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\CommonServiceLocator.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Plugin.Connectivity, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xam.Plugin.Connectivity.3.2.0\lib\net45\Plugin.Connectivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Plugin.Connectivity.Abstractions, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xam.Plugin.Connectivity.3.2.0\lib\net45\Plugin.Connectivity.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Prism.Forms, Version=6.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Prism.Forms.6.3.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Prism.Forms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Prism.Unity.Forms, Version=6.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Prism.Unity.Forms.6.3.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Prism.Unity.Forms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="Unity.Abstractions">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Unity.Configuration">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Unity.Container">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.Container.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Unity.Interception">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.Interception.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Unity.Interception.Configuration">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.Interception.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Unity.RegistrationByConvention">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.RegistrationByConvention.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Unity.ServiceLocation">
-      <HintPath>..\..\..\packages\Unity.5.8.6\lib\net45\Unity.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xamarin.Forms.3.1.0.583944\lib\netstandard1.0\Xamarin.Forms.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Core.UnitTests, Version=1.0.6386.41670, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xamarin.Forms.Mocks.2.3.4.3\lib\portable-net45+win8+wpa81+wp8\Xamarin.Forms.Core.UnitTests.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xamarin.Forms.3.1.0.583944\lib\netstandard1.0\Xamarin.Forms.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xamarin.Forms.3.1.0.583944\lib\netstandard1.0\Xamarin.Forms.Xaml.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml.UnitTests, Version=1.0.6386.41669, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Xamarin.Forms.Mocks.2.3.4.3\lib\portable-net45+win8+wpa81+wp8\Xamarin.Forms.Xaml.UnitTests.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="nunit" Version="3.10.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Xamarin.Forms.Mocks" Version="3.0.0.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Fakes\Services\TmdbServiceFake.cs" />
-    <Compile Include="Mocks\Services\PageDialogServiceMock.cs" />
-    <Compile Include="Mocks\PrismApplicationMock.cs" />
-    <Compile Include="Mocks\Views\MainPageMock.cs" />
-    <Compile Include="Mocks\Views\MovieDetailPageMock.cs" />
-    <Compile Include="Mocks\Views\SearchMoviesPageMock.cs" />
-    <Compile Include="ViewModels\TestSearchMoviesPageViewModel.cs" />
-    <Compile Include="ViewModels\TestMovieDetailPageViewModel.cs" />
-    <Compile Include="ViewModels\TestMainPageViewModel.cs" />
+    <ProjectReference Include="..\..\TheMovie\TheMovie.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\TheMovie\TheMovie.csproj">
-      <Project>{f8b5a3ee-dd42-417b-827a-5471caa3f7bd}</Project>
-      <Name>TheMovie</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\NUnit.3.10.1\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.targets'))" />
-  </Target>
-  <Import Project="..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\..\..\packages\Xamarin.Forms.3.1.0.583944\build\netstandard1.0\Xamarin.Forms.targets')" />
+
 </Project>

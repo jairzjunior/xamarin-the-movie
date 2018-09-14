@@ -10,7 +10,7 @@ namespace TheMovie.UITest
     public class Tests
     {
         IApp app;
-        Platform platform;
+        readonly Platform platform;
 
         public Tests(Platform platform)
         {

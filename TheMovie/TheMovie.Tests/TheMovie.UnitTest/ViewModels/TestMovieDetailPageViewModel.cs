@@ -9,8 +9,8 @@ namespace TheMovie.UnitTest.ViewModels
     [TestFixture]
     public class TestMovieDetailPageViewModel
     {        
-        private MovieDetailPageViewModel viewModel;
-        private PrismApplicationMock app;        
+        private readonly MovieDetailPageViewModel viewModel;
+        private readonly PrismApplicationMock app;        
 
         public TestMovieDetailPageViewModel()
         {            
@@ -28,8 +28,10 @@ namespace TheMovie.UnitTest.ViewModels
                 Id = 1
             };
 
-            var parameters = new NavigationParameters();
-            parameters.Add(nameof(movie), movie);
+            var parameters = new NavigationParameters
+            {
+                { nameof(movie), movie }
+            };
 
             viewModel.OnNavigatingTo(parameters);            
             Assert.AreNotEqual(null, viewModel.Movie);

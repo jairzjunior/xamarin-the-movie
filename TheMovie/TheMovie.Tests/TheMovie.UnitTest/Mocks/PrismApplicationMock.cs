@@ -1,8 +1,9 @@
-﻿using Prism.Navigation;
-using Prism.Unity;
+﻿using Prism.DryIoc;
+using Prism.Ioc;
+using Prism.Navigation;
 using TheMovie.Interfaces;
-using TheMovie.UnitTest.Mocks.Views;
 using TheMovie.UnitTest.Fakes.Services;
+using TheMovie.UnitTest.Mocks.Views;
 using TheMovie.Views;
 using Xamarin.Forms;
 
@@ -13,22 +14,17 @@ namespace TheMovie.UnitTest.Mocks
         public new INavigationService NavigationService => base.NavigationService;
 
         protected override void OnInitialized()
-        {            
-            NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MainPage)}");
-        }        
-
-        protected override void RegisterTypes()
         {
-            Container.RegisterTypeForNavigation<NavigationPage>();            
-            Container.RegisterTypeForNavigation<MainPageMock>(nameof(MainPage));
-            Container.RegisterTypeForNavigation<SearchMoviesPageMock>(nameof(SearchMoviesPage));
-            Container.RegisterTypeForNavigation<MovieDetailPageMock>(nameof(MovieDetailPage));
-            DependencyService.Register<IApiService, TmdbServiceFake>();
+            NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MainPage)}");
         }
 
-        public INavigationService CreateNavigationServiceForPage(Page page)
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            return CreateNavigationService(page);
+            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<MainPageMock>(nameof(MainPage));
+            containerRegistry.RegisterForNavigation<SearchMoviesPageMock>(nameof(SearchMoviesPage));
+            containerRegistry.RegisterForNavigation<MovieDetailPageMock>(nameof(MovieDetailPage));
+            DependencyService.Register<IApiService, TmdbServiceFake>();
         }
     }
 }
