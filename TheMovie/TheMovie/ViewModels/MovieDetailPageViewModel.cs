@@ -22,7 +22,7 @@ namespace TheMovie.ViewModels
             }            
         }
 
-        public async void OnNavigatingTo(NavigationParameters parameters)
+        public async void OnNavigatingTo(INavigationParameters parameters)
         {
             Movie = parameters.GetValue<Movie>("movie");            
             Title = Movie.Title;
