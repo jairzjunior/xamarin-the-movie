@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using FFImageLoading.Forms.Platform;
+using Plugin.CurrentActivity;
 
 namespace TheMovie.Droid
 {
@@ -13,11 +14,12 @@ namespace TheMovie.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            base.OnCreate(bundle);
-
-            CachedImageRenderer.Init(enableFastRenderer: true);
+            base.OnCreate(bundle);            
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            CachedImageRenderer.Init(enableFastRenderer: true);
+            CrossCurrentActivity.Current.Init(this, bundle);
 
             LoadApplication(new App());
         }

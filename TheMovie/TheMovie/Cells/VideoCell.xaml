@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:controls="clr-namespace:TheMovie.Controls;assembly=TheMovie"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TheMovie.Cells.VideoCell">
+    <ContentView.Content>
+        <controls:CardView            
+            Margin="5,0,5,5"
+            HeightRequest="200">
+            <Grid>
+                <ffimageloading:CachedImage
+                    HeightRequest="190"
+                    Source="{Binding Key, StringFormat='https://img.youtube.com/vi/{0}/hqdefault.jpg'}"
+                    LoadingPlaceholder="placeholder_landscape.png"
+                    DownsampleToViewSize="True"
+                    Aspect="AspectFill"/>
+                <Grid
+                    Padding="10"
+                    VerticalOptions="End"
+                    BackgroundColor="#50000000">
+                    <Label
+                        Text="{Binding Name}"
+                        TextColor="White"                    
+                        AutomationId="LabelTitle"
+                        LineBreakMode="TailTruncation"
+                        MaxLines="2"
+                        FontSize="Medium"
+                        FontAttributes="Bold"/>
+                </Grid>
+            </Grid>
+        </controls:CardView>
+    </ContentView.Content>
+</ContentView>

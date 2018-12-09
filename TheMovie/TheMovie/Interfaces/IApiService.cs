@@ -30,6 +30,20 @@ namespace TheMovie.Interfaces
         Task<MovieDetail> GetMovieDetailAsync(int id);
 
         /// <summary>
+        /// Get images of the movie by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<MovieImage> GetMovieImagesAsync(int id);
+
+        /// <summary>
+        /// Get videos of the movie by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>        
+        Task<MovieVideo> GetMovieVideosAsync(int id);
+
+        /// <summary>
         /// Get list of the genres.
         /// </summary>
         /// <returns></returns>

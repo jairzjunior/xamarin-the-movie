@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"             
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              xmlns:converters="clr-namespace:TheMovie.Converters;assembly=TheMovie"
              xmlns:controls="clr-namespace:TheMovie.Controls;assembly=TheMovie"
+             xmlns:cells="clr-namespace:TheMovie.Cells;assembly=TheMovie"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:pancards="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:pancardsControls="clr-namespace:PanCardView.Controls;assembly=PanCardView"             
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"    
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="TheMovie.Views.MovieDetailPage"
              BackgroundColor="{DynamicResource WindowBackground}"
              Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Icon="ic_share"
+            Text="Share"
+            Command="{Binding ShareCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
             <converters:NegateBooleanConverter x:Key="inverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -18,12 +29,20 @@
         <StackLayout>
             <controls:CardView>
                 <StackLayout Spacing="0">
-                    <ffimageloading:CachedImage
-                        HeightRequest="200"
-                        Source="{Binding Movie.BackdropPath, StringFormat='https://image.tmdb.org/t/p/original/{0}'}"
-                        LoadingPlaceholder="placeholder_landscape.png"
-                        DownsampleToViewSize="True"
-                        Aspect="AspectFill"/>
+                    <pancards:CarouselView
+                        ItemsSource="{Binding Backdrops, Mode=OneWay}">
+                        <pancards:CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <ffimageloading:CachedImage
+                                    HeightRequest="200"
+                                    Source="{Binding FilePath, StringFormat='https://image.tmdb.org/t/p/original/{0}'}"
+                                    LoadingPlaceholder="placeholder_landscape.png"
+                                    DownsampleToViewSize="True"
+                                    Aspect="AspectFill"/>
+                            </DataTemplate>
+                        </pancards:CarouselView.ItemTemplate>
+                        <pancardsControls:IndicatorsControl/>
+                    </pancards:CarouselView>
                     <StackLayout Margin="10">
                         <Label Text="Title" FontSize="Medium" FontAttributes="Bold"/>
                         <Label AutomationId="LabelTitle" Text="{Binding Movie.Title}" FontSize="Small"/>
@@ -47,6 +66,34 @@
                 <StackLayout Margin="10">
                     <Label Text="Overview" FontSize="Medium" FontAttributes="Bold"/>
                     <Label Text="{Binding Movie.Overview}" FontSize="Small"/>
+                </StackLayout>
+            </controls:CardView>
+            <controls:CardView>
+                <StackLayout Spacing="0">
+                    <Label Text="Videos" 
+                        Margin="10"                           
+                        FontSize="Medium" 
+                        FontAttributes="Bold"/>
+                    <ListView
+                        x:Name="VideosListView"
+                        ItemsSource="{Binding Videos, Mode=OneWay}"
+                        HeightRequest="{Binding HeightVideos}"
+                        SeparatorVisibility="None"
+                        RowHeight="200">
+                        <ListView.Behaviors>
+                            <behaviors:EventToCommandBehavior 
+                                EventName="ItemTapped" 
+                                Command="{Binding OpenVideoCommand}"
+                                EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                        </ListView.Behaviors>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <cells:VideoCell/>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackLayout>
             </controls:CardView>
         </StackLayout>

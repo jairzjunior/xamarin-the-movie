@@ -114,7 +114,57 @@ namespace TheMovie.Services
 
             return null;
         }
-        
+
+        public async Task<MovieImage> GetMovieImagesAsync(int id)
+        {
+            var restUrl = $"{baseUrl}{moviePath}/{id}/images?api_key={apiKey}";
+            try
+            {
+                using (var response = await httpClient.GetAsync(restUrl).ConfigureAwait(false))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        {
+                            return JsonConvert.DeserializeObject<MovieImage>(
+                                await new StreamReader(responseStream).ReadToEndAsync().ConfigureAwait(false));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ReportError(ex);
+            }
+
+            return null;
+        }
+
+        public async Task<MovieVideo> GetMovieVideosAsync(int id)
+        {
+            var restUrl = $"{baseUrl}{moviePath}/{id}/videos?api_key={apiKey}";
+            try
+            {
+                using (var response = await httpClient.GetAsync(restUrl).ConfigureAwait(false))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        {
+                            return JsonConvert.DeserializeObject<MovieVideo>(
+                                await new StreamReader(responseStream).ReadToEndAsync().ConfigureAwait(false));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ReportError(ex);
+            }
+
+            return null;
+        }
+
         public async Task<List<Genre>> GetGenresAsync()
         {            
             var restUrl = $"{baseUrl}{genreListPath}?api_key={apiKey}&language={language}";

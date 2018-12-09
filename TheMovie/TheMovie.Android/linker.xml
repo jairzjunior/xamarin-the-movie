@@ -3,6 +3,10 @@
   <assembly fullname="TheMovie">
     <type fullname="*" />
   </assembly>
+  
+  <assembly fullname="PanCardView">
+    <type fullname="*" />
+  </assembly>
 
   <assembly fullname="DryIoc">
     <type fullname="*" />

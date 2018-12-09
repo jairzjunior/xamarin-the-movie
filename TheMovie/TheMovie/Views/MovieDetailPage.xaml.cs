@@ -9,6 +9,11 @@ namespace TheMovie.Views
         public MovieDetailPage()
         {
             InitializeComponent();
-        }        
+
+            VideosListView.ItemSelected += (sender, e) => {
+                // Manually deselect item
+                ((ListView)sender).SelectedItem = null;
+            };
+        }      
     }
 }
